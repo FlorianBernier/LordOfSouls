@@ -1,25 +1,25 @@
-
 Setting = require("setting")
 --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
+local myGame = require("game")
+
 love.load = function()
     Setting.load()
     --- --- ---
-
+    myGame.load()
 end
 
 love.update = function(dt)
     Setting.update(dt)
     --- --- ---
-
+    myGame.update(dt)
 end
 
 love.draw = function()
     Setting.draw()
     --- --- ---
-    --example
-    love.graphics.rectangle("fill",((ScreenWidth/2)-10 + Camera_x), ((ScreenHeight/2)-10 + Camera_y), 20, 20)
+    myGame.draw()
 end
 
 love.keypressed = function(key)
