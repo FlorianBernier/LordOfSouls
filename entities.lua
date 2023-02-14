@@ -1,3 +1,14 @@
+--colisionPointRect : detecte la colision entre un point x,y et un rectangle 
+function Collide_P_R(x1,y1,x2,y2,w,h)
+    return x1 > x2 and x1 < x2 + w and y1 > y2 and y1 < y2 + h
+end
+
+--DistanceDeuxPoints : detecte la distance entre 2 points 
+function Dist_P_P(x1,y1,x2,y2)
+    return math.sqrt( math.abs(x1 - x2) * math.abs(x1 - x2)  + math.abs(y1 - y2) * math.abs(y1 - y2) )
+end
+
+
 local Entities = {}
 
 local MyHero = require("hero")
@@ -5,6 +16,12 @@ local Monster = require("Monster")
 
 Entities.load = function()
     MyHero.load()
+    MyHero.create(80,nil,"Soanara", 100, 100)
+    MyHero.create(80,nil,"Soanara", 100, 200)
+    MyHero.create(80,nil,"Soanara", 100, 300)
+    MyHero.create(80,nil,"Soanara", 100, 400)
+    MyHero.create(80,nil,"Soanara", 100, 500)
+    MyHero.create(80,nil,"Soanara", 100, 600)
     Monster.load()
 end
 

@@ -3,27 +3,27 @@ Setting = require("setting")
 
 
 local myGame = require("game")
-local myMenu = require("menu")
+--local myMenu = require("menu")
 
 love.load = function()
     Setting.load()
     --- --- ---
     myGame.load()
-    myMenu.load()
+    --myMenu.load()
 end
 
 love.update = function(dt)
     Setting.update(dt)
     --- --- ---
     myGame.update(dt)
-    myMenu.update(dt)
+    --myMenu.update(dt)
 end
 
 love.draw = function()
     Setting.draw()
     --- --- ---
     myGame.draw()
-    myMenu.draw()
+    --myMenu.draw()
 end
 
 love.keypressed = function(key)
