@@ -1,5 +1,7 @@
 local Game = {}
 
+local myEntities = require("entities")
+
 Game.Map = {}
 
 Game.Map.Grid =  {
@@ -426,6 +428,7 @@ Game.TileSheet = nil
 Game.TileTextures = {}
 Game.TileTypes = {}
 
+
 function textureAtribution()
     Game.TileSheet = love.graphics.newImage("images/TileSheetMap.png")
     local nbColumns = Game.TileSheet:getWidth() / Game.Map.TILE_WIDTH
@@ -454,13 +457,16 @@ end
 
 Game.load = function()
     textureAtribution()
+    myEntities.load()
 end
+
 
 Game.update = function(dt)
+    myEntities.update(dt)
 end
 
 
-Game.draw = function()
+function drawMapAndCollide()
     for l = 1, Game.Map.MAP_HEIGHT do
         for c = 1, Game.Map.MAP_WIDTH do
             local id = Game.Map.Grid[l][c]
@@ -487,16 +493,22 @@ Game.draw = function()
                 love.graphics.draw(Game.TileSheet, texQuad3, x + Camera_x, y + Camera_y)
             end
 
-            
-            local idCollide = Game.Map.GridCollide[l][c]
-            local texQuadCollide = Game.TileTextures[idCollide]
-            if texQuadCollide ~= nil then
-                local x = (c-1)*Game.Map.TILE_WIDTH
-                local y = (l-1)*Game.Map.TILE_HEIGHT
-                love.graphics.draw(Game.TileSheet, texQuadCollide, x + Camera_x, y + Camera_y)
+            if love.keyboard.isDown('a') then
+                local idCollide = Game.Map.GridCollide[l][c]
+                local texQuadCollide = Game.TileTextures[idCollide]
+                if texQuadCollide ~= nil then
+                    local x = (c-1)*Game.Map.TILE_WIDTH
+                    local y = (l-1)*Game.Map.TILE_HEIGHT
+                    love.graphics.draw(Game.TileSheet, texQuadCollide, x + Camera_x, y + Camera_y)
+                end
             end
         end
     end
+end
+
+Game.draw = function()
+    drawMapAndCollide()
+    myEntities.draw()
 end
 
 return Game
