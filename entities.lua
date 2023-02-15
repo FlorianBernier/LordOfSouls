@@ -16,12 +16,6 @@ local Monster = require("Monster")
 
 Entities.load = function()
     MyHero.load()
-    MyHero.create(80,nil,"Soanara", 100, 100)
-    MyHero.create(80,nil,"Soanara", 100, 200)
-    MyHero.create(80,nil,"Soanara", 100, 300)
-    MyHero.create(80,nil,"Soanara", 100, 400)
-    MyHero.create(80,nil,"Soanara", 100, 500)
-    MyHero.create(80,nil,"Soanara", 100, 600)
     Monster.load()
 end
 
