@@ -2,62 +2,102 @@ local Hero = {}
 
 Hero.speed = 100
 
-Hero.animation = {
-    moveup = {}, movedown = {}, moveleft = {}, moveright = {}
+Hero.anim = {
+    moveUp = {}, moveDown = {}, moveLeft = {}, moveRight = {},
+    attack1Up = {},  attack1Down = {}, attack1Left = {}, attack1Right = {}
 }
-Hero.animation.x = 0
-Hero.animation.y = 0
-Hero.animation.img = love.graphics.newImage("images/hero.png")
 
+Hero.anim.x = 0
+Hero.anim.y = 0
+Hero.anim.img = love.graphics.newImage("images/hero.png")
 
 --- --- --- --- --- --- 
 
 local function loadQuad()
-    local directions = {"moveup", "moveleft", "movedown", "moveright"}
+    local directions = {"moveUp", "moveLeft", "moveDown", "moveRight"}
     for i, direction in ipairs(directions) do
         for j = 0, 9 do
-            Hero.animation[direction][j+1] = love.graphics.newQuad(j * 64, 64 * (i+7), 64, 64, Hero.animation.img)
+            Hero.anim[direction][j+1] = love.graphics.newQuad(j * 64, 64 * (i+7), 64, 64, Hero.anim.img)
         end
     end
-    Hero.animation.nbImg = 9
-    Hero.animation.imgActuelle = 0
-    Hero.animation.direction = "movedown"
+    local directions = {"attack1Up", "attack1Left", "attack1Down", "attack1Right"}
+    for i, direction in ipairs(directions) do
+        for j = 0, 8 do
+            Hero.anim[direction][j+1] = love.graphics.newQuad(j * 64, 64 * (i+3), 64, 64, Hero.anim.img)
+        end
+    end
+    Hero.anim.nbImg = 9
+    Hero.anim.imgActuelle = 0
+    Hero.anim.direction = "moveDown"
+end
+
+local function loadAttackQuad()
+    local directions = {"attack1Up", "attack1Left", "attack1Down", "attack1Right"}
+    for i, direction in ipairs(directions) do
+        for j = 0, 8 do
+            Hero.anim[direction][j+1] = love.graphics.newQuad(j * 64, 64 * (i+3), 64, 64, Hero.anim.img)
+        end
+    end
+    Hero.anim.nbImg = 9
+    Hero.anim.imgActuelle = 0
+    Hero.anim.direction = "attack1Down"
 end
 
 Hero.load = function()
     loadQuad()
+    --loadAttackQuad()
 end
 
 local function updateHeroAnim(dt)
-    if love.keyboard.isDown("up") then
-        Hero.animation.direction = "moveup"
-        Hero.animation.y = Hero.animation.y - 100 * dt
+    local isMoving = false
+    
+    if love.keyboard.isDown("z") then
+        Hero.anim.direction = "moveUp"
+        Hero.anim.y = Hero.anim.y - Hero.speed * dt
+        isMoving = true
 
-    elseif love.keyboard.isDown("down") then
-        Hero.animation.direction = "movedown"
-        Hero.animation.y = Hero.animation.y + 100 * dt
+    elseif love.keyboard.isDown("s") then
+        Hero.anim.direction = "moveDown"
+        Hero.anim.y = Hero.anim.y + Hero.speed * dt
+        isMoving = true
 
-    elseif love.keyboard.isDown("left") then
-        Hero.animation.direction = "moveleft"
-        Hero.animation.x = Hero.animation.x - 100 * dt
+    elseif love.keyboard.isDown("q") then
+        Hero.anim.direction = "moveLeft"
+        Hero.anim.x = Hero.anim.x - Hero.speed * dt
+        isMoving = true
         
-    elseif love.keyboard.isDown("right") then
-        Hero.animation.direction = "moveright"
-        Hero.animation.x = Hero.animation.x + 100 * dt
+    elseif love.keyboard.isDown("d") then
+        Hero.anim.direction = "moveRight"
+        Hero.anim.x = Hero.anim.x + Hero.speed * dt
+        isMoving = true
     end
 
-    
-    if not love.keyboard.isDown("up") and not love.keyboard.isDown("down") and not love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
-        Hero.animation.imgActuelle = 0
-        
+    if isMoving then
+        Hero.anim.imgActuelle = Hero.anim.imgActuelle + Hero.anim.nbImg * dt
+        if Hero.anim.imgActuelle >= Hero.anim.nbImg then
+            Hero.anim.imgActuelle = 0
+        end
     else
-    Hero.animation.imgActuelle = Hero.animation.imgActuelle + Hero.animation.nbImg * dt
-        if Hero.animation.imgActuelle >= Hero.animation.nbImg then
-            Hero.animation.imgActuelle = 0
+        Hero.anim.imgActuelle = 0
+    end
+    
+    if love.keyboard.isDown("e") then
+        if Hero.anim.direction == "moveUp" then
+            Hero.anim.direction = "moveDown"
+        elseif Hero.anim.direction == "moveDown" then
+            Hero.anim.direction = "attack1Down"
+        elseif Hero.anim.direction == "moveLeft" then
+            Hero.anim.direction = "attack1Left"
+        elseif Hero.anim.direction == "moveRight" then
+            Hero.anim.direction = "attack1Right"
+        end
+        
+        Hero.anim.imgActuelle = Hero.anim.imgActuelle + Hero.anim.nbImg * dt
+        if Hero.anim.imgActuelle >= Hero.anim.nbImg then
+            Hero.anim.imgActuelle = 0
         end
     end
 end
-
 
 Hero.update = function(dt)
     updateHeroAnim(dt)
@@ -65,18 +105,38 @@ end
 
 local function drawHeroAnim()
     local directions = {
-        moveup = Hero.animation.moveup,
-        movedown = Hero.animation.movedown,
-        moveleft = Hero.animation.moveleft,
-        moveright = Hero.animation.moveright
-      }
-      
-    love.graphics.draw(Hero.animation.img, directions[Hero.animation.direction][math.floor(Hero.animation.imgActuelle)+1], Hero.animation.x+Camera_x, Hero.animation.y+Camera_y)
+        moveUp = Hero.anim.moveUp,
+        moveDown = Hero.anim.moveDown,
+        moveLeft = Hero.anim.moveLeft,
+        moveRight = Hero.anim.moveRight,
+        attack1Up = Hero.anim.attack1Up,
+        attack1Down = Hero.anim.attack1Down,
+        attack1Left = Hero.anim.attack1Left,
+        attack1Right = Hero.anim.attack1Right
+    }
+
+    local x = Hero.anim.x + Camera_x
+    local y = Hero.anim.y + Camera_y
+
+    if love.keyboard.isDown("e") then
+        -- Afficher l'animation d'attaque en fonction de la direction du personnage
+        if Hero.anim.direction == "moveUp" then
+            love.graphics.draw(Hero.anim.img, directions.attack1Up[math.floor(Hero.anim.imgActuelle)+1], x, y)
+        elseif Hero.anim.direction == "moveDown" then
+            love.graphics.draw(Hero.anim.img, directions.attack1Down[math.floor(Hero.anim.imgActuelle)+1], x, y)
+        elseif Hero.anim.direction == "moveLeft" then
+            love.graphics.draw(Hero.anim.img, directions.attack1Left[math.floor(Hero.anim.imgActuelle)+1], x, y)
+        elseif Hero.anim.direction == "moveRight" then
+            love.graphics.draw(Hero.anim.img, directions.attack1Right[math.floor(Hero.anim.imgActuelle)+1], x, y)
+        end
+    else
+        -- Afficher l'animation de déplacement en fonction de la direction du personnage
+        love.graphics.draw(Hero.anim.img, directions[Hero.anim.direction][math.floor(Hero.anim.imgActuelle)+1], x, y)
+    end
 end
 
 Hero.draw = function()
     drawHeroAnim()
 end
-
 
 return Hero
