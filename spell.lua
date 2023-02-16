@@ -2,13 +2,13 @@ local Spell = {}
 
 Spell.anim = {
 }
-Spell.anim.life = love.graphics.newImage("images/spell/midnight.png")
-Spell.anim.fire = love.graphics.newImage("images/spell/fire.png")
+Spell.anim.life = love.graphics.newImage("images/spell/fire.png")
+Spell.anim.fire = love.graphics.newImage("images/spell/midnight.png")
 
 
 Spell.anim.currentQuad = 1
 Spell.anim.currentTime = 0
-Spell.anim.frameDuration = 0.01
+Spell.anim.frameDuration = 0.05
 
 Spell.anim.showAnim = false
 Spell.anim.showAnim2 = false

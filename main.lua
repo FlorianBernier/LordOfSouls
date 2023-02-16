@@ -1,10 +1,11 @@
 Setting = require("setting")
 --- --- --- --- --- --- --- --- --- --- --- --- ---
-
+local sndIntro = love.audio.newSource("sons/introLordOfSouls.wav", "static")
 
 local MyGame = require("game")
 
 love.load = function()
+    love.audio.play(sndIntro)
     Setting.load()
     --- --- ---
     MyGame.load()
