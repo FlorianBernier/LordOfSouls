@@ -2,7 +2,7 @@ local Spell = {}
 
 Spell.anim = {
 }
-Spell.anim.life = love.graphics.newImage("images/spell/life.png")
+Spell.anim.life = love.graphics.newImage("images/spell/midnight.png")
 Spell.anim.fire = love.graphics.newImage("images/spell/fire.png")
 
 
