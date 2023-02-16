@@ -12,25 +12,29 @@ end
 local Entities = {}
 
 local MyHero = require("hero")
-local Monster = require("Monster")
+local MyMonster = require("Monster")
 
 Entities.load = function()
     MyHero.load()
-    Monster.load()
+    MyMonster.load()
 end
 
 
 
 Entities.update = function(dt)
     MyHero.update(dt)
-    Monster.update(dt)
+    MyMonster.update(dt)
 end
 
 
 
 Entities.draw = function()
     MyHero.draw()
-    Monster.draw()
+    MyMonster.draw()
+end
+
+Entities.keypressed = function(key)
+    MyHero.keypressed(key)
 end
 
 Entities.mousepressed = function()

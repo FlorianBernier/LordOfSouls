@@ -1,4 +1,6 @@
-local Hero = {}
+Hero = {}
+
+local MySpell = require("spell")
 
 Hero.speed = 100
 
@@ -13,11 +15,11 @@ Hero.anim = {
 
 Hero.anim.x = 0
 Hero.anim.y = 0
-Hero.anim.img = love.graphics.newImage("images/death.png")
+Hero.anim.img = love.graphics.newImage("images/fireMage.png")
 
 --- --- --- --- --- ---
 
---Move / Attack1 / Attack2
+--Move / Attack1 / Attack2 / Spell1 / Spell2 / Death / Slash
 local function loadQuad()
     --Move
     local directions = {"moveUp", "moveLeft", "moveDown", "moveRight"}
@@ -74,12 +76,14 @@ local function loadQuad()
     end
     Hero.anim.nbImgdeath = 6
     Hero.anim.death = ""
+    --slash
 
 end
 
 
 Hero.load = function()
     loadQuad()
+    MySpell.load()
 end
 
 
@@ -205,6 +209,7 @@ end
 
 Hero.update = function(dt)
     updateHeroAnim(dt)
+    MySpell.update(dt)
 end
 
 local function drawHeroAnim()
@@ -282,7 +287,13 @@ end
 
 
 Hero.draw = function()
+    MySpell.draw()
     drawHeroAnim()
+    
+end
+
+Hero.keypressed = function(key)
+    MySpell.keypressed(key)
 end
 
 Hero.mousepressed = function()

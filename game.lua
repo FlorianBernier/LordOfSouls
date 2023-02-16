@@ -1,6 +1,6 @@
 local Game = {}
 
-local myEntities = require("entities")
+local MyEntities = require("entities")
 
 Game.Map = {}
 
@@ -457,12 +457,12 @@ end
 
 Game.load = function()
     textureAtribution()
-    myEntities.load()
+    MyEntities.load()
 end
 
 
 Game.update = function(dt)
-    myEntities.update(dt)
+    MyEntities.update(dt)
 end
 
 
@@ -508,8 +508,14 @@ end
 
 Game.draw = function()
     drawMapAndCollide()
-    myEntities.draw()
+    MyEntities.draw()
 end
+
+
+Game.keypressed = function(key)
+    MyEntities.keypressed(key)
+end
+
 
 Game.mousepressed = function ()
 end

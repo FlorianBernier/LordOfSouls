@@ -2,30 +2,30 @@ Setting = require("setting")
 --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
-local myGame = require("game")
+local MyGame = require("game")
 
 love.load = function()
     Setting.load()
     --- --- ---
-    myGame.load()
+    MyGame.load()
 end
 
 love.update = function(dt)
     Setting.update(dt)
     --- --- ---
-    myGame.update(dt)
+    MyGame.update(dt)
 end
 
 love.draw = function()
     Setting.draw()
     --- --- ---
-    myGame.draw()
+    MyGame.draw()
 end
 
 love.keypressed = function(key)
     Setting.keypressed(key)
     --- --- ---
-
+    MyGame.keypressed(key)
 end
 
 love.mousepressed = function()
