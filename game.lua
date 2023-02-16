@@ -493,7 +493,7 @@ function drawMapAndCollide()
                 love.graphics.draw(Game.TileSheet, texQuad3, x + Camera_x, y + Camera_y)
             end
 
-            if love.keyboard.isDown('a') then
+            if love.keyboard.isDown('f4') then
                 local idCollide = Game.Map.GridCollide[l][c]
                 local texQuadCollide = Game.TileTextures[idCollide]
                 if texQuadCollide ~= nil then
@@ -509,6 +509,9 @@ end
 Game.draw = function()
     drawMapAndCollide()
     myEntities.draw()
+end
+
+Game.mousepressed = function ()
 end
 
 return Game

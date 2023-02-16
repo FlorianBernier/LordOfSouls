@@ -31,7 +31,7 @@ end
 love.mousepressed = function()
     Setting.mousepressed()
     --- --- ---
-
+    
 end
 
 
