@@ -33,5 +33,8 @@ Entities.draw = function()
     Monster.draw()
 end
 
+Entities.mousepressed = function()
+end
+
 
 return Entities
