@@ -13,7 +13,7 @@ Hero.anim = {
 
 Hero.anim.x = 0
 Hero.anim.y = 0
-Hero.anim.img = love.graphics.newImage("images/hero.png")
+Hero.anim.img = love.graphics.newImage("images/death.png")
 
 --- --- --- --- --- ---
 
