@@ -287,9 +287,9 @@ end
 
 
 Hero.draw = function()
-    MySpell.draw()
     drawHeroAnim()
-    
+    MySpell.draw()
+
 end
 
 Hero.keypressed = function(key)
