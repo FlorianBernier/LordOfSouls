@@ -1,6 +1,8 @@
 local Monster = {}
+Monster.quad = {}
 
-Monster.animation = {}
+
+
 
 Monster.load = function()
 end

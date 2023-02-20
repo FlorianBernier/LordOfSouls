@@ -122,7 +122,7 @@ function CreateSpellPhantom(x,y,dx,dy,name)
 
         frame = 1,
         frameMax = 61,
-        frameSpeed = 8,
+        frameSpeed = 30,
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -218,6 +218,7 @@ local function changeDirSpell(x, y, button)
         end
     end
 end
+
 Spell.mousepressed = function(x, y, button)
     if button == 2 then
         CreateSpellPhantom(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X-50, MOUSE_Y -50, "phantom")
