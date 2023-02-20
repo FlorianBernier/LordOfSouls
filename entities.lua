@@ -29,8 +29,9 @@ end
 
 
 Entities.draw = function()
-    MyHero.draw()
     MyMonster.draw()
+    MyHero.draw()
+    
 end
 
 Entities.keypressed = function(key)
