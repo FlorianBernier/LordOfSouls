@@ -37,7 +37,8 @@ Entities.keypressed = function(key)
     MyHero.keypressed(key)
 end
 
-Entities.mousepressed = function()
+Entities.mousepressed = function(x, y, button)
+    MyHero.mousepressed(x, y, button)
 end
 
 

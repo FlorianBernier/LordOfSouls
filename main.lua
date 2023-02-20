@@ -29,9 +29,10 @@ love.keypressed = function(key)
     MyGame.keypressed(key)
 end
 
-love.mousepressed = function()
+love.mousepressed = function(x, y, button)
     Setting.mousepressed()
     --- --- ---
+    MyGame.mousepressed(x, y, button)
     
 end
 

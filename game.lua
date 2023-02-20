@@ -517,7 +517,8 @@ Game.keypressed = function(key)
 end
 
 
-Game.mousepressed = function ()
+Game.mousepressed = function (x, y, button)
+    MyEntities.mousepressed(x, y, button)
 end
 
 return Game

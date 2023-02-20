@@ -296,7 +296,8 @@ Hero.keypressed = function(key)
     MySpell.keypressed(key)
 end
 
-Hero.mousepressed = function()
+Hero.mousepressed = function(x, y, button)
+    MySpell.mousepressed(x, y, button)
 end
 
 

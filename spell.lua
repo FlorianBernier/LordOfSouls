@@ -1,9 +1,10 @@
 local Spell = {}
-Spell.quad = {} 
+Spell.quad = {}
 
 Spell.anim = {
     ["fire"]        = love.graphics.newImage("images/spell/fire.png") ,
-    ["midnight"]    = love.graphics.newImage("images/spell/midnight.png")
+    ["midnight"]    = love.graphics.newImage("images/spell/midnight.png"),
+    ["life"]     = love.graphics.newImage("images/spell/life.png"),
 }
 
 
@@ -17,14 +18,14 @@ local function loadQuad()
     
     for i = 1, 8, 1 do
         for j = 1, 8, 1 do
-            if (i-1)*8 + j <= 61 then -- Dans l'idÃ©e ou tu as que 61 quad par images
+            if (i-1)*8 + j <= 61 then
                 Spell.quad[(i-1)*8 + j] = love.graphics.newQuad(
                     (i-1)*100, 
                     (j-1)*100,
                     100,
                     100, 
                     Spell.anim["fire"]
-                )                
+                )
             end
         end
     end
@@ -36,7 +37,7 @@ end
 
 local listeSpells = {}
 
-function createSpell(x,y,dx,dy,name)
+function CreateSpellFire(x,y,dx,dy,name)
     local spell = {
         x = x,
         y = y,
@@ -49,8 +50,55 @@ function createSpell(x,y,dx,dy,name)
 
         frame = 1,
         frameMax = 61,
-        frameSpeed = 8,
+        frameSpeed = 12,
     }
+    
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    lastSpell = spell
+    table.insert(listeSpells, spell)
+end
+
+function CreateSpellMidnight(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        angle = math.atan2(dy-y, dx- x),
+        speed = 150,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 12,
+    }
+    
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    lastSpell = spell
+    table.insert(listeSpells, spell)
+end
+
+function CreateSpellLife(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        angle = math.atan2(dy-y, dx- x),
+        speed = 0,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 12,
+    }
+    
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
 
@@ -69,10 +117,8 @@ local function updateSpellAnim(dt)
         if s.frame > 61 then
             table.remove(listeSpells, i)
         end
-
-
-
     end
+    
 end
 
 Spell.update = function(dt)
@@ -95,16 +141,34 @@ end
 
 Spell.keypressed = function(key)
     if key == "e" then
-        createSpell(Hero.anim.x -25, Hero.anim.y-25, MOUSE_X -50, MOUSE_Y -50, "fire")
+        CreateSpellFire(Hero.anim.x -25, Hero.anim.y-25, MOUSE_X -50, MOUSE_Y -50, "fire")
     end
     if key == "a" then
-        createSpell(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X-50, MOUSE_Y -50, "midnight")
+        CreateSpellMidnight(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X-50, MOUSE_Y -50, "midnight")
+    end
+    if key == "c" then
+        CreateSpellLife(Hero.anim.x -18, Hero.anim.y -18, Hero.anim.x -25, Hero.anim.y -25, "life")
     end
 end
 
-
-Spell.mousepressed = function()
+local lastSpell
+local function changeDirSpell(x, y, button)
+    if button == 1 then
+        for i = #listeSpells, 1, -1 do
+        local s = listeSpells[i]
+            if s.name == "fire" or "midnight" then 
+            s.dx = x - Camera_x - 50 
+            s.dy = y - Camera_y - 50 
+            s.angle = math.atan2(s.dy-s.y, s.dx-s.x)
+            s.vx = math.cos(s.angle) *1.5* s.speed
+            s.vy = math.sin(s.angle) *1.5* s.speed
+            break
+            end
+        end
+    end
 end
-
-
+Spell.mousepressed = function(x, y, button)
+    changeDirSpell(x, y, button)
+end
+    
 return Spell
