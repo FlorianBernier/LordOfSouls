@@ -5,6 +5,7 @@ Spell.anim = {
     ["fire"]        = love.graphics.newImage("images/spell/fire.png") ,
     ["midnight"]    = love.graphics.newImage("images/spell/midnight.png"),
     ["life"]     = love.graphics.newImage("images/spell/life.png"),
+    ["phantom"]  = love.graphics.newImage("images/spell/phantom.png"),
 }
 
 
@@ -106,6 +107,29 @@ function CreateSpellLife(x,y,dx,dy,name)
     table.insert(listeSpells, spell)
 end
 
+function CreateSpellPhantom(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        angle = math.atan2(dy-y, dx- x),
+        speed = 200,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 8,
+    }
+    
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    lastSpell = spell
+    table.insert(listeSpells, spell)
+end
+
 
 local function updateSpellAnim(dt)
     for i = #listeSpells, 1, -1 do
@@ -169,6 +193,9 @@ local function changeDirSpell(x, y, button)
 end
 Spell.mousepressed = function(x, y, button)
     changeDirSpell(x, y, button)
+    if button == 2 then
+        CreateSpellPhantom(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X-50, MOUSE_Y -50, "phantom")
+    end
 end
     
 return Spell
