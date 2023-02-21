@@ -3,7 +3,6 @@ Hero = {}
 local MySpell = require("spell")
 
 Hero.speed = 100
-
 Hero.anim = {
     moveUp = {}, moveDown = {}, moveLeft = {}, moveRight = {},
     attack1Up = {}, attack1Down = {}, attack1Left = {}, attack1Right = {},
@@ -12,12 +11,12 @@ Hero.anim = {
     spell2Up = {}, spell2Down = {}, spell2Left = {}, spell2Right = {},
     deathUp = {}, deathDown = {}, deathLeft = {}, deathRight = {},
 }
-
 Hero.anim.x = 0
 Hero.anim.y = 0
 Hero.anim.img = love.graphics.newImage("images/fireMage.png")
 
 --- --- --- --- --- ---
+
 
 --Move / Attack1 / Attack2 / Spell1 / Spell2 / Death / Slash
 local function loadQuad()
@@ -79,7 +78,6 @@ local function loadQuad()
     --slash
 
 end
-
 
 Hero.load = function()
     loadQuad()
@@ -212,6 +210,7 @@ Hero.update = function(dt)
     MySpell.update(dt)
 end
 
+
 local function drawHeroAnim()
     local x = Hero.anim.x + Camera_x 
     local y = Hero.anim.y + Camera_y 
@@ -285,18 +284,40 @@ local function drawHeroAnim()
     end
 end
 
-
 Hero.draw = function()
     drawHeroAnim()
     MySpell.draw()
+end
 
+
+local function keypressedSpell(key)
+    if key == "e" then
+        CreateSpellFire(Hero.anim.x -25, Hero.anim.y-25, Mouse_x -50, Mouse_y -50, "fire")
+    end
+    if key == "a" then
+        CreateSpellMidnight(Hero.anim.x -25, Hero.anim.y -25, Mouse_x -50, Mouse_y -50, "midnight")
+    end
+    if key == "c" then
+        CreateSpellLife(Hero.anim.x -18, Hero.anim.y -18, Hero.anim.x -25, Hero.anim.y -25, "life")
+    end
+    if key == "f" then
+        CreateSpellProtect(Hero.anim.x -18, Hero.anim.y -18, Mouse_x-50, Mouse_y -50, "protect")
+    end
 end
 
 Hero.keypressed = function(key)
-    MySpell.keypressed(key)
+    keypressedSpell(key)
+end
+
+
+local function mousepressedSpell(x, y, button)
+    if button == 2 then
+        CreateSpellPhantom(Hero.anim.x -25, Hero.anim.y -25, Mouse_x-50, Mouse_y -50, "phantom")
+    end
 end
 
 Hero.mousepressed = function(x, y, button)
+    mousepressedSpell(x, y, button)
     MySpell.mousepressed(x, y, button)
 end
 

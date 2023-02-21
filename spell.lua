@@ -2,18 +2,15 @@ local Spell = {}
 Spell.quad = {}
 
 Spell.anim = {
-    ["fire"]        = love.graphics.newImage("images/spell/fire.png") ,
-    ["midnight"]    = love.graphics.newImage("images/spell/midnight.png"),
+    ["fire"]     = love.graphics.newImage("images/spell/fire.png") ,
+    ["midnight"] = love.graphics.newImage("images/spell/midnight.png"),
     ["life"]     = love.graphics.newImage("images/spell/life.png"),
     ["phantom"]  = love.graphics.newImage("images/spell/phantom.png"),
     ["protect"]  = love.graphics.newImage("images/spell/protect.png"),
 }
 
-
-
-
-
 --- --- --- --- --- ---
+
 
 local function loadQuad()
     
@@ -182,18 +179,6 @@ end
 
 
 Spell.keypressed = function(key)
-    if key == "e" then
-        CreateSpellFire(Hero.anim.x -25, Hero.anim.y-25, MOUSE_X -50, MOUSE_Y -50, "fire")
-    end
-    if key == "a" then
-        CreateSpellMidnight(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X -50, MOUSE_Y -50, "midnight")
-    end
-    if key == "c" then
-        CreateSpellLife(Hero.anim.x -18, Hero.anim.y -18, Hero.anim.x -25, Hero.anim.y -25, "life")
-    end
-    if key == "f" then
-        CreateSpellProtect(Hero.anim.x -18, Hero.anim.y -18, MOUSE_X-50, MOUSE_Y -50, "protect")
-    end
 end
 
 
@@ -202,7 +187,7 @@ local function changeDirSpell(x, y, button)
     if button == 1 then
         for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]
-            if s.name == "fire" or "midnight" then
+            if s.name == "fire" or "" then
             s.dx = x
             s.dy = y
             s.angle = math.atan2(s.dy-s.y, s.dx-s.x)
@@ -214,12 +199,9 @@ local function changeDirSpell(x, y, button)
     end
 end
 
-
 Spell.mousepressed = function(x, y, button)
-    if button == 2 then
-        CreateSpellPhantom(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X-50, MOUSE_Y -50, "phantom")
-    end
-    changeDirSpell(MOUSE_X - 50, MOUSE_Y -50, button)
+    changeDirSpell(Mouse_x-50, Mouse_y-50, button)
 end
+
 
 return Spell
