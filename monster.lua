@@ -91,6 +91,7 @@ local function updateDeath(death, pEntities)
                     death.state = ZSTATES.ATTACK
                     death.target = Hero
                     CreateSpellFire(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "midnight")
+                    CreateSpellLife(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "life")
                 end
             end
         end
