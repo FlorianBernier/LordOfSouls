@@ -45,7 +45,6 @@ end
 --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 function createHero()
-    --local hero = {}
     hero = createSprite(listSprite, "hero", "player_", 4)
     hero.x = ScreenWidth / 2
     hero.y = (ScreenHeight / 6) * 5
@@ -58,7 +57,6 @@ function createHero()
             hero.visible = false
         end
     end
-    --return hero
 end
 
 function createZombie()
@@ -71,8 +69,6 @@ function createZombie()
 
     myZombie.state = ZSTATES.NONE
 end
-
-
 
 
 function animeSprite(dt)
@@ -90,20 +86,6 @@ function animeSprite(dt)
     end
 end
 
-function moveHero(dt)
-    if love.keyboard.isDown("left") and hero.x > 0 then
-        hero.x = hero.x - VAR.speedHero * dt
-    end
-    if love.keyboard.isDown("right") and hero.x < ScreenWidth then
-        hero.x = hero.x + VAR.speedHero * dt
-    end
-    if love.keyboard.isDown("up") and hero.y > 0 then
-        hero.y = hero.y - VAR.speedHero * dt
-    end
-    if love.keyboard.isDown("down") and hero.y < ScreenHeight then
-        hero.y = hero.y + VAR.speedHero * dt
-    end
-end
 
 function updateZombie(pZombie, pEntities)
     if pZombie.state == ZSTATES.NONE then
@@ -187,7 +169,7 @@ Monster.load = function()
     createHero()
 
     local nZombies
-    for nZombie = 1, 10 do
+    for nZombie = 1, 3 do
         createZombie()
     end
 end
@@ -196,7 +178,6 @@ end
 
 Monster.update = function(dt)
     animeSprite(dt)
-    moveHero(dt)
 end
 
 
@@ -210,7 +191,7 @@ Monster.draw = function()
             local frame = sprite.img[math.floor(sprite.currentFrame)]
             love.graphics.draw(frame, sprite.x - (sprite.w/2)+Camera_x, sprite.y - (sprite.h/2)+Camera_y)
             if sprite.type == "zombie" then
-                if love.keyboard.isDown("a") then
+                if love.keyboard.isDown("f5") then
                     love.graphics.print(sprite.state, sprite.x - 10, sprite.y - sprite.h - 10)
                 end
                 if sprite.state == ZSTATES.ATTACK then

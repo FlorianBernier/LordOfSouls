@@ -1,4 +1,5 @@
 Setting = require("setting")
+
 --- --- --- --- --- --- --- --- --- --- --- --- ---
 local sndIntro = love.audio.newSource("sons/introLordOfSouls.wav", "static")
 

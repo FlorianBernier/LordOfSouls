@@ -10,8 +10,7 @@ Spell.anim = {
 }
 
 
-MOUSE_X = 0
-MOUSE_Y = 0
+
 
 
 --- --- --- --- --- ---
@@ -127,7 +126,6 @@ function CreateSpellPhantom(x,y,dx,dy,name)
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
-
     table.insert(listeSpells, spell)
 end
 
@@ -170,10 +168,6 @@ local function updateSpellAnim(dt)
 end
 
 Spell.update = function(dt)
-    MOUSE_X, MOUSE_Y = love.mouse.getPosition()
-    MOUSE_X = MOUSE_X - Camera_x
-    MOUSE_Y = MOUSE_Y - Camera_y
-    
     updateSpellAnim(dt)
 end
 
@@ -192,7 +186,7 @@ Spell.keypressed = function(key)
         CreateSpellFire(Hero.anim.x -25, Hero.anim.y-25, MOUSE_X -50, MOUSE_Y -50, "fire")
     end
     if key == "a" then
-        CreateSpellMidnight(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X-50, MOUSE_Y -50, "midnight")
+        CreateSpellMidnight(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X -50, MOUSE_Y -50, "midnight")
     end
     if key == "c" then
         CreateSpellLife(Hero.anim.x -18, Hero.anim.y -18, Hero.anim.x -25, Hero.anim.y -25, "life")
@@ -202,14 +196,15 @@ Spell.keypressed = function(key)
     end
 end
 
+
 local lastSpell
 local function changeDirSpell(x, y, button)
     if button == 1 then
         for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]
             if s.name == "fire" or "midnight" then
-            s.dx = x - Camera_x - 50 
-            s.dy = y - Camera_y - 50 
+            s.dx = x
+            s.dy = y
             s.angle = math.atan2(s.dy-s.y, s.dx-s.x)
             s.vx = math.cos(s.angle) *1.5* s.speed
             s.vy = math.sin(s.angle) *1.5* s.speed
@@ -219,12 +214,12 @@ local function changeDirSpell(x, y, button)
     end
 end
 
+
 Spell.mousepressed = function(x, y, button)
     if button == 2 then
         CreateSpellPhantom(Hero.anim.x -25, Hero.anim.y -25, MOUSE_X-50, MOUSE_Y -50, "phantom")
     end
-    changeDirSpell(x, y, button)
-    
+    changeDirSpell(MOUSE_X - 50, MOUSE_Y -50, button)
 end
-    
+
 return Spell

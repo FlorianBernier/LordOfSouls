@@ -213,8 +213,8 @@ Hero.update = function(dt)
 end
 
 local function drawHeroAnim()
-    local x = Hero.anim.x + Camera_x
-    local y = Hero.anim.y + Camera_y
+    local x = Hero.anim.x + Camera_x 
+    local y = Hero.anim.y + Camera_y 
 
     local directions = {
         moveUp = Hero.anim.moveUp,
