@@ -40,24 +40,24 @@ local function createSprite(pList, pType, pImgFileName, pFrame)
 end
 
 local function createDeath()
-    local myZombie = createSprite(listSprite, "zombie", "monster_", 2)
-    myZombie.x = math.random(10, Screen_Width - 10)
-    myZombie.y = math.random(10, (Screen_Height/2) - 10)
-    myZombie.speed = math.random(20, 100) / 200
-    myZombie.range = math.random(10, 150)
-    myZombie.target = nil
+    local myDeath = createSprite(listSprite, "zombie", "monster_", 2)
+    myDeath.x = math.random(10, Screen_Width - 10)
+    myDeath.y = math.random(10, (Screen_Height/2) - 10)
+    myDeath.speed = math.random(20, 100) / 200
+    myDeath.range = math.random(10, 150)
+    myDeath.target = nil
 
-    myZombie.state = ZSTATES.NONE
+    myDeath.state = ZSTATES.NONE
 end
 
 Monster.load = function()
     local nZombies
-    for nZombie = 1, 3 do
+    for nZombie = 1, 5 do
         createDeath()
     end
 end
 
-local function updateZombie(death, pEntities)
+local function updateDeath(death, pEntities)
     if death.state == ZSTATES.NONE then
         death.state = ZSTATES.CHANGEDIR
     elseif death.state == ZSTATES.WALK then
@@ -89,7 +89,8 @@ local function updateZombie(death, pEntities)
                 local distance = math.dist(death.x, death.y, Hero.x, Hero.y)
                 if distance < death.range then
                     death.state = ZSTATES.ATTACK
-                    death.target = sprite
+                    death.target = Hero
+                    CreateSpellFire(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "midnight")
                 end
             end
         end
@@ -142,7 +143,7 @@ local function animeSprite(dt)
         sprite.y = sprite.y + sprite.vy * dt
 
         if sprite.type == "zombie" then
-            updateZombie(sprite, listSprite)
+            updateDeath(sprite, listSprite)
         end
     end
 end
@@ -153,13 +154,14 @@ end
 
 
 Monster.draw = function()
+    love.graphics.print(math.floor(Hero.life), Hero.x+20+Camera_x,Hero.y+Camera_y)
     for i, sprite in ipairs(listSprite) do
         if sprite.visible == true then
             local frame = sprite.img[math.floor(sprite.currentFrame)]
             love.graphics.draw(frame, sprite.x - (sprite.w/2)+Camera_x, sprite.y - (sprite.h/2)+Camera_y)
             if sprite.type == "zombie" then
                 if love.keyboard.isDown("f5") then
-                    love.graphics.print(sprite.state, sprite.x - 10, sprite.y - sprite.h - 10)
+                    love.graphics.print(sprite.state, sprite.x - 10+Camera_x, sprite.y - sprite.h - 10+Camera_y)
                 end
                 if sprite.state == ZSTATES.ATTACK then
                     love.graphics.draw(imgAlert, sprite.x - imgAlert:getWidth()/2+Camera_x, sprite.y - sprite.h - 2+Camera_y)
