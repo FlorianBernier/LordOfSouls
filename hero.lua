@@ -2,7 +2,7 @@ Hero = {}
 
 local MySpell = require("spell")
 
-Hero.speed = 100
+
 Hero.anim = {
     moveUp = {}, moveDown = {}, moveLeft = {}, moveRight = {},
     attack1Up = {}, attack1Down = {}, attack1Left = {}, attack1Right = {},
@@ -11,10 +11,24 @@ Hero.anim = {
     spell2Up = {}, spell2Down = {}, spell2Left = {}, spell2Right = {},
     deathUp = {}, deathDown = {}, deathLeft = {}, deathRight = {},
 }
-Hero.anim.x = 0
-Hero.anim.y = 0
+
 Hero.anim.img = love.graphics.newImage("images/fireMage.png")
 
+
+Hero.speed = 150
+Hero.x = 0
+Hero.y = 0
+
+Hero.type = "hero"
+Hero.visible = true
+Hero.life = 100
+Hero.hurt = function()
+    Hero.life = Hero.life - 0.1
+    if Hero.life <= 0 then
+        Hero.life = 0
+        Hero.visible = false
+    end
+end
 --- --- --- --- --- ---
 
 
@@ -91,24 +105,24 @@ local function updateHeroAnim(dt)
     --Move
     if love.keyboard.isDown("z") then
         Hero.anim.direction = "moveUp"
-        Hero.anim.y = Hero.anim.y - Hero.speed * dt
+        Hero.y = Hero.y - Hero.speed * dt
         isMove = true
         lastPos = "moveUp"
 
     elseif love.keyboard.isDown("s") then
         Hero.anim.direction = "moveDown"
-        Hero.anim.y = Hero.anim.y + Hero.speed * dt
+        Hero.y = Hero.y + Hero.speed * dt
         isMove = true
         lastPos = "moveDown"
 
     elseif love.keyboard.isDown("q") then
         Hero.anim.direction = "moveLeft"
-        Hero.anim.x = Hero.anim.x - Hero.speed * dt
+        Hero.x = Hero.x - Hero.speed * dt
         isMove = true
         lastPos = "moveLeft"
     elseif love.keyboard.isDown("d") then
         Hero.anim.direction = "moveRight"
-        Hero.anim.x = Hero.anim.x + Hero.speed * dt
+        Hero.x = Hero.x + Hero.speed * dt
         isMove = true
         lastPos = "moveRight"
     
@@ -212,8 +226,8 @@ end
 
 
 local function drawHeroAnim()
-    local x = Hero.anim.x + Camera_x 
-    local y = Hero.anim.y + Camera_y 
+    local x = Hero.x + Camera_x 
+    local y = Hero.y + Camera_y 
 
     local directions = {
         moveUp = Hero.anim.moveUp,
@@ -292,16 +306,16 @@ end
 
 local function keypressedSpell(key)
     if key == "e" then
-        CreateSpellFire(Hero.anim.x -25, Hero.anim.y-25, Mouse_x -50, Mouse_y -50, "fire")
+        CreateSpellFire(Hero.x -25, Hero.y-25, Mouse_x -50, Mouse_y -50, "fire")
     end
     if key == "a" then
-        CreateSpellMidnight(Hero.anim.x -25, Hero.anim.y -25, Mouse_x -50, Mouse_y -50, "midnight")
+        CreateSpellMidnight(Hero.x -25, Hero.y -25, Mouse_x -50, Mouse_y -50, "midnight")
     end
     if key == "c" then
-        CreateSpellLife(Hero.anim.x -18, Hero.anim.y -18, Hero.anim.x -25, Hero.anim.y -25, "life")
+        CreateSpellLife(Hero.x -18, Hero.y -18, Hero.x -25, Hero.y -25, "life")
     end
     if key == "f" then
-        CreateSpellProtect(Hero.anim.x -18, Hero.anim.y -18, Mouse_x-50, Mouse_y -50, "protect")
+        CreateSpellProtect(Hero.x -18, Hero.y -18, Mouse_x-50, Mouse_y -50, "protect")
     end
 end
 
@@ -312,7 +326,7 @@ end
 
 local function mousepressedSpell(x, y, button)
     if button == 2 then
-        CreateSpellPhantom(Hero.anim.x -25, Hero.anim.y -25, Mouse_x-50, Mouse_y -50, "phantom")
+        CreateSpellPhantom(Hero.x -25, Hero.y -25, Mouse_x-50, Mouse_y -50, "phantom")
     end
 end
 

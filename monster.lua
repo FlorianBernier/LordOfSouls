@@ -1,7 +1,5 @@
 local Monster = {}
 
---- --- --- --- --- --- ---
-
 -- Returns the distance between two points.
 function math.dist(x1,y1, x2,y2) return ((x2-x1)^2+(y2-y1)^2)^0.5 end
 
@@ -15,21 +13,20 @@ local ZSTATES = {NONE = "", WALK = "walk", ATTACK = "attack", BITE = "bite", CHA
 local imgAlert = love.graphics.newImage("images copy/alert.png")
 
 local listSprite = {}
-local hero = {}
 
-imhZombie= {
+local imgMonster= {
     love.graphics.newImage("images copy/deathTest.png"),
     love.graphics.newImage("images copy/deathTest2.png")}
 
+--- --- --- --- --- --- ---
 
-
-function createSprite(pList, pType, pImgFileName, pFrame)
+local function createSprite(pList, pType, pImgFileName, pFrame)
     local mySprite = {}
     mySprite.type = pType
     mySprite.visible = true
     mySprite.img = {}
     mySprite.currentFrame = 1
-    mySprite.img = imhZombie
+    mySprite.img = imgMonster
 
     mySprite.x = 0
     mySprite.y = 0
@@ -42,36 +39,100 @@ function createSprite(pList, pType, pImgFileName, pFrame)
     return mySprite
 end
 
---- --- --- --- --- --- --- --- --- --- --- --- ---
-
-function createHero()
-    hero = createSprite(listSprite, "hero", "player_", 4)
-    hero.x = ScreenWidth / 2
-    hero.y = (ScreenHeight / 6) * 5
-    hero.speed = 0
-    hero.life = 100
-    hero.hurt = function()
-        hero.life = hero.life - 0.1
-        if hero.life <= 0 then
-            hero.life = 0
-            hero.visible = false
-        end
-    end
-end
-
-function createZombie()
+local function createDeath()
     local myZombie = createSprite(listSprite, "zombie", "monster_", 2)
-    myZombie.x = math.random(10, ScreenWidth - 10)
-    myZombie.y = math.random(10, (ScreenHeight/2) - 10)
-    myZombie.speed = math.random(5, 50) / 200
+    myZombie.x = math.random(10, Screen_Width - 10)
+    myZombie.y = math.random(10, (Screen_Height/2) - 10)
+    myZombie.speed = math.random(20, 100) / 200
     myZombie.range = math.random(10, 150)
     myZombie.target = nil
 
     myZombie.state = ZSTATES.NONE
 end
 
+Monster.load = function()
+    local nZombies
+    for nZombie = 1, 3 do
+        createDeath()
+    end
+end
 
-function animeSprite(dt)
+local function updateZombie(death, pEntities)
+    if death.state == ZSTATES.NONE then
+        death.state = ZSTATES.CHANGEDIR
+    elseif death.state == ZSTATES.WALK then
+        --collide with border 
+        local bordCollide = false
+        if death.x < 0 then
+            death.x = 0
+            bordCollide = true
+        end
+        if death.x > Screen_Width then
+            death.x = Screen_Width
+            bordCollide = true
+        end
+        if death.y < 0 then
+            death.y = 0
+            bordCollide = true
+        end
+        if death.y > Screen_Height then
+            death.y = Screen_Height
+            bordCollide = true
+        end
+        if bordCollide then
+            death.state = ZSTATES.CHANGEDIR
+        end
+
+        --look for hero 
+        for i, sprite in ipairs(pEntities) do
+            if Hero.type == "hero" and Hero.visible == true then
+                local distance = math.dist(death.x, death.y, Hero.x, Hero.y)
+                if distance < death.range then
+                    death.state = ZSTATES.ATTACK
+                    death.target = sprite
+                end
+            end
+        end
+
+    
+    elseif death.state == ZSTATES.ATTACK then
+        if death.target == nil then
+            death.state = ZSTATES.CHANGEDIR
+        elseif math.dist(death.x, death.y, death.target.x, death.target.y) > death.range and death.target.type == "hero" then
+            death.state = ZSTATES.CHANGEDIR
+        elseif math.dist(death.x, death.y, death.target.x, death.target.y) < 5 and death.target.type == "hero" then
+            death.state = ZSTATES.BITE
+            death.vx = 0
+            death.vy = 0
+        else
+            --attack
+            local destX, destY
+            destX = math.random(death.target.x-20, death.target.x+20)
+            destY = math.random(death.target.y-20, death.target.y+20)
+            local angle = math.angle(death.x, death.y, destX, destY)
+            death.vx = death.speed* 2 * 60 * math.cos(angle)
+            death.vy = death.speed* 2 * 60 * math.sin(angle)
+        end
+    elseif death.state == ZSTATES.BITE then
+        if math.dist(death.x, death.y, death.target.x, death.target.y) > 5 and death.target.type == "hero" then
+            death.state = ZSTATES.ATTACK
+        else
+            if death.target.hurt ~= nil then
+            death.target.hurt()
+            end
+            if death.target.visible == false then
+                death.state = ZSTATES.CHANGEDIR
+            end
+        end
+    elseif death.state == ZSTATES.CHANGEDIR then
+        local angle = math.angle(death.x, death.y, math.random(0, Screen_Width), math.random(0, Screen_Height))
+        death.vx = death.speed * 60 * math.cos(angle)
+        death.vy = death.speed * 60 * math.sin(angle)
+        death.state = ZSTATES.WALK
+    end
+end
+
+local function animeSprite(dt)
     for i, sprite in ipairs(listSprite) do
         sprite.currentFrame = sprite.currentFrame + VAR.speedSprite*dt
         if sprite.currentFrame >= #sprite.img+1 then-- +1: du fait d'avoir utiliser math.floor(frame)
@@ -86,106 +147,12 @@ function animeSprite(dt)
     end
 end
 
-
-function updateZombie(pZombie, pEntities)
-    if pZombie.state == ZSTATES.NONE then
-        pZombie.state = ZSTATES.CHANGEDIR
-    elseif pZombie.state == ZSTATES.WALK then
-        --collide with border 
-        local bordCollide = false
-        if pZombie.x < 0 then
-            pZombie.x = 0
-            bordCollide = true
-        end
-        if pZombie.x > ScreenWidth then
-            pZombie.x = ScreenWidth
-            bordCollide = true
-        end
-        if pZombie.y < 0 then
-            pZombie.y = 0
-            bordCollide = true
-        end
-        if pZombie.y > ScreenHeight then
-            pZombie.y = ScreenHeight
-            bordCollide = true
-        end
-        if bordCollide then
-            pZombie.state = ZSTATES.CHANGEDIR
-        end
-
-        --look for hero 
-        for i, sprite in ipairs(pEntities) do
-            if sprite.type == "hero" and sprite.visible == true then
-                local distance = math.dist(pZombie.x, pZombie.y, sprite.x, sprite.y)
-                if distance < pZombie.range then
-                    pZombie.state = ZSTATES.ATTACK
-                    pZombie.target = sprite
-                end
-            end
-        end
-
-    
-    elseif pZombie.state == ZSTATES.ATTACK then
-        if pZombie.target == nil then
-            pZombie.state = ZSTATES.CHANGEDIR
-        elseif math.dist(pZombie.x, pZombie.y, pZombie.target.x, pZombie.target.y) > pZombie.range and pZombie.target.type == "hero" then
-            pZombie.state = ZSTATES.CHANGEDIR
-        elseif math.dist(pZombie.x, pZombie.y, pZombie.target.x, pZombie.target.y) < 5 and pZombie.target.type == "hero" then
-            pZombie.state = ZSTATES.BITE
-            pZombie.vx = 0
-            pZombie.vy = 0
-        else
-            --attack
-            local destX, destY
-            destX = math.random(pZombie.target.x-20, pZombie.target.x+20)
-            destY = math.random(pZombie.target.y-20, pZombie.target.y+20)
-            local angle = math.angle(pZombie.x, pZombie.y, destX, destY)
-            pZombie.vx = pZombie.speed* 2 * 60 * math.cos(angle)
-            pZombie.vy = pZombie.speed* 2 * 60 * math.sin(angle)
-        end
-    elseif pZombie.state == ZSTATES.BITE then
-        if math.dist(pZombie.x, pZombie.y, pZombie.target.x, pZombie.target.y) > 5 and pZombie.target.type == "hero" then
-            pZombie.state = ZSTATES.ATTACK
-        else
-            if pZombie.target.hurt ~= nil then
-            pZombie.target.hurt()
-            end
-            if pZombie.target.visible == false then
-                pZombie.state = ZSTATES.CHANGEDIR
-            end
-        end
-    elseif pZombie.state == ZSTATES.CHANGEDIR then
-        local angle = math.angle(pZombie.x, pZombie.y, math.random(0, ScreenWidth), math.random(0, ScreenHeight))
-        pZombie.vx = pZombie.speed * 60 * math.cos(angle)
-        pZombie.vy = pZombie.speed * 60 * math.sin(angle)
-        pZombie.state = ZSTATES.WALK
-    end
-end
-
-Monster.load = function()
-    ScreenWidth = love.graphics.getWidth()/2--larg(800)x
-    ScreenHeight = love.graphics.getHeight()/2--haut(600)y
-
-    createHero()
-
-    local nZombies
-    for nZombie = 1, 3 do
-        createZombie()
-    end
-end
-
-
-
 Monster.update = function(dt)
     animeSprite(dt)
 end
 
 
-
 Monster.draw = function()
-    love.graphics.push()
-    love.graphics.scale(2, 2)
-    love.graphics.print("LIFE:"..tostring(math.floor(hero.life)), 1, 1)
     for i, sprite in ipairs(listSprite) do
         if sprite.visible == true then
             local frame = sprite.img[math.floor(sprite.currentFrame)]
@@ -200,7 +167,6 @@ Monster.draw = function()
             end
         end
     end
-    love.graphics.pop()
 end
 
 
