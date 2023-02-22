@@ -6,20 +6,20 @@ function math.dist(x1,y1, x2,y2) return ((x2-x1)^2+(y2-y1)^2)^0.5 end
 -- Returns the angle between two vectors assuming the same origin.
 function math.angle(x1,y1, x2,y2) return math.atan2(y2-y1, x2-x1) end
 
-local VAR = {speedSprite = 7, speedHero = 100}
+local VAR = {speedSprite = 7}
 
 local ZSTATES = {NONE = "", WALK = "walk", ATTACK = "attack", BITE = "bite", CHANGEDIR = "change"}
 
 local imgAlert = love.graphics.newImage("images copy/alert.png")
 
-local listSprite = {}
+
 
 local imgMonster= {
     love.graphics.newImage("images copy/deathTest.png"),
     love.graphics.newImage("images copy/deathTest2.png")}
 
 --- --- --- --- --- --- ---
-
+local listSprite = {}
 local function createSprite(pList, pType, pImgFileName, pFrame)
     local mySprite = {}
     mySprite.type = pType
@@ -44,15 +44,14 @@ local function createDeath()
     myDeath.x = math.random(10, Screen_Width - 10)
     myDeath.y = math.random(10, (Screen_Height/2) - 10)
     myDeath.speed = math.random(20, 100) / 200
-    myDeath.range = math.random(10, 150)
+    myDeath.range = math.random(50, 200)
     myDeath.target = nil
 
     myDeath.state = ZSTATES.NONE
 end
 
 Monster.load = function()
-    local nZombies
-    for nZombie = 1, 5 do
+    for i = 1, 5 do
         createDeath()
     end
 end
@@ -90,8 +89,9 @@ local function updateDeath(death, pEntities)
                 if distance < death.range then
                     death.state = ZSTATES.ATTACK
                     death.target = Hero
-                    CreateSpellFire(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "midnight")
+                    CreateSpellFire(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "bluefire")
                     CreateSpellLife(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "life")
+                    CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
                 end
             end
         end
@@ -155,7 +155,6 @@ end
 
 
 Monster.draw = function()
-    love.graphics.print(math.floor(Hero.life), Hero.x+20+Camera_x,Hero.y+Camera_y)
     for i, sprite in ipairs(listSprite) do
         if sprite.visible == true then
             local frame = sprite.img[math.floor(sprite.currentFrame)]

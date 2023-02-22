@@ -299,6 +299,7 @@ local function drawHeroAnim()
 end
 
 Hero.draw = function()
+    love.graphics.print(math.floor(Hero.life), Hero.x+20+Camera_x,Hero.y+Camera_y)
     drawHeroAnim()
     MySpell.draw()
 end

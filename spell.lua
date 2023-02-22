@@ -7,6 +7,9 @@ Spell.anim = {
     ["life"]     = love.graphics.newImage("images/spell/life.png"),
     ["phantom"]  = love.graphics.newImage("images/spell/phantom.png"),
     ["protect"]  = love.graphics.newImage("images/spell/protect.png"),
+
+    ["bluefire"] = love.graphics.newImage("images/spell/bluefire.png"),
+    ["brightfire"] = love.graphics.newImage("images/spell/brightfire.png"),
 }
 
 --- --- --- --- --- ---
@@ -148,6 +151,53 @@ function CreateSpellProtect(x,y,dx,dy,name)
 
     table.insert(listeSpells, spell)
 end
+
+function CreateSpellBluefire(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        
+        angle = math.atan2(dy-y, dx- x),
+        speed = 100,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 8,
+    }
+    
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    table.insert(listeSpells, spell)
+end
+
+function CreateSpellBrightfire(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        
+        angle = math.atan2(dy-y, dx- x),
+        speed = 0,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 8,
+    }
+    
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    table.insert(listeSpells, spell)
+end
+
 
 
 local function updateSpellAnim(dt)
