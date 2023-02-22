@@ -98,7 +98,12 @@ function CreateSpellLife(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
+        bonusHeal = 10,
+
+        
     }
+    
+    Hero.life = Hero.life + spell.bonusHeal
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
@@ -151,7 +156,7 @@ function CreateSpellProtect(x,y,dx,dy,name)
 
     table.insert(listeSpells, spell)
 end
-
+--- --- --- --- ---
 function CreateSpellBluefire(x,y,dx,dy,name)
     local spell = {
         x = x,
@@ -191,6 +196,7 @@ function CreateSpellBrightfire(x,y,dx,dy,name)
         frameMax = 61,
         frameSpeed = 8,
     }
+    Hero.life = Hero.life - 10
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
@@ -237,7 +243,7 @@ local function changeDirSpell(x, y, button)
     if button == 1 then
         for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]
-            if s.name == "fire" or "" then
+            if s.name == "fire" or  s.name == "midnight" then
             s.dx = x
             s.dy = y
             s.angle = math.atan2(s.dy-s.y, s.dx-s.x)

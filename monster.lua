@@ -20,7 +20,7 @@ local imgMonster= {
 
 --- --- --- --- --- --- ---
 local listSprite = {}
-local function createSprite(pList, pType, pImgFileName, pFrame)
+local function createSprite(pList, pType)
     local mySprite = {}
     mySprite.type = pType
     mySprite.visible = true
@@ -52,13 +52,26 @@ local function createDeath()
     
 end
 
+local function createDragon()
+    local myDeath = 
+    createSprite(listSprite, "toto", "monster_", 2)
+    myDeath.x = math.random(10, Screen_Width - 10)
+    myDeath.y = math.random(10, (Screen_Height/2) - 10)
+    myDeath.speed = math.random(500, 2000) / 200
+    myDeath.range = math.random(200, 500)
+    myDeath.target = nil
+
+    myDeath.state = ZSTATES.NONE
+end
+
 Monster.load = function()
+    createDragon()
     for i = 1, 5 do
         createDeath()
     end
 end
 
-local function updateDeath(death, pEntities)
+local function updateDeath(death)
     if death.state == ZSTATES.NONE then
         death.state = ZSTATES.CHANGEDIR
     elseif death.state == ZSTATES.WALK then
@@ -85,18 +98,18 @@ local function updateDeath(death, pEntities)
         end
 
         --look for hero 
-        for i, sprite in ipairs(pEntities) do
-            if Hero.type == "hero" and Hero.visible == true then
-                local distance = math.dist(death.x, death.y, Hero.x, Hero.y)
-                if distance < death.range then
-                    death.state = ZSTATES.ATTACK
-                    death.target = Hero
-                    CreateSpellFire(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "bluefire")
-                    CreateSpellLife(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "life")
-                    CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
-                end
+        
+        if Hero.type == "hero" and Hero.visible == true then
+            local distance = math.dist(death.x, death.y, Hero.x, Hero.y)
+            if distance < death.range then
+                death.state = ZSTATES.ATTACK
+                death.target = Hero
+                CreateSpellFire(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "bluefire")
+                --CreateSpellLife(death.x-50, death.y-50, Hero.x -25, Hero.y-25,"life")
+                CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
             end
         end
+        
 
     elseif death.state == ZSTATES.ATTACK then
         if death.target == nil then
@@ -144,7 +157,11 @@ local function animeSprite(dt)
         sprite.x = sprite.x + sprite.vx * dt
         sprite.y = sprite.y + sprite.vy * dt
 
-        if sprite.type == "zombie" then
+        -- if sprite.type == "zombie" then
+        --     updateDeath(sprite, listSprite)
+        -- end
+        
+        if sprite.type == "toto" then
             updateDeath(sprite, listSprite)
         end
     end
