@@ -40,7 +40,8 @@ local function createSprite(pList, pType, pImgFileName, pFrame)
 end
 
 local function createDeath()
-    local myDeath = createSprite(listSprite, "zombie", "monster_", 2)
+    local myDeath = 
+    createSprite(listSprite, "zombie", "monster_", 2)
     myDeath.x = math.random(10, Screen_Width - 10)
     myDeath.y = math.random(10, (Screen_Height/2) - 10)
     myDeath.speed = math.random(20, 100) / 200
@@ -48,6 +49,7 @@ local function createDeath()
     myDeath.target = nil
 
     myDeath.state = ZSTATES.NONE
+    
 end
 
 Monster.load = function()
@@ -96,7 +98,6 @@ local function updateDeath(death, pEntities)
             end
         end
 
-    
     elseif death.state == ZSTATES.ATTACK then
         if death.target == nil then
             death.state = ZSTATES.CHANGEDIR
@@ -164,7 +165,7 @@ Monster.draw = function()
                     love.graphics.print(sprite.state, sprite.x - 10+Camera_x, sprite.y - sprite.h - 10+Camera_y)
                 end
                 if sprite.state == ZSTATES.ATTACK then
-                    love.graphics.draw(imgAlert, sprite.x - imgAlert:getWidth()/2+Camera_x, sprite.y - sprite.h - 2+Camera_y)
+                    love.graphics.draw(imgAlert, sprite.x - imgAlert:getWidth()/2+Camera_x, sprite.y+50 - sprite.h - 2+Camera_y)
                 end
             end
         end
