@@ -11,7 +11,7 @@ Entities.load = function()
     MyMonster.load()
     CreateDeath()
 
-    --CreateBloodMage()
+    CreateBloodMage()
 end
 
 

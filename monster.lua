@@ -19,17 +19,19 @@ local imgDeath = {
     love.graphics.newImage("images/monster/type/death/deathTest2.png")}
 
 local imgBloodMage = {
-    love.graphics.newImage("images/monster/type/death/imgBloodMage1.png"),
-    love.graphics.newImage("images/monster/type/death/imgBloodMage2.png")}
+    love.graphics.newImage("images/monster/type/bloodMage/bloodMage1.png"),
+    love.graphics.newImage("images/monster/type/bloodMage/bloodMage2.png")}
 --- --- --- --- --- --- ---
 local listSprite = {}
-local function createSprite(pList, pType)
+local function createSprite(pList, pType, pImgFileName, pFrame, pimgMonstre)
     local mySprite = {}
     mySprite.type = pType
     mySprite.visible = true
     mySprite.img = {}
     mySprite.currentFrame = 1
-    mySprite.img = imgDeath
+    for i = 1, #pimgMonstre do
+        table.insert(mySprite.img, pimgMonstre[i])
+    end
 
     mySprite.x = 0
     mySprite.y = 0
@@ -44,7 +46,7 @@ end
 
 function CreateDeath()
     local myDeath = 
-    createSprite(listSprite, "zombie", "monster_", 2)
+    createSprite(listSprite, "death", "death_", 2, imgDeath)
     myDeath.x = math.random(10, Screen_Width - 10)
     myDeath.y = math.random(10, (Screen_Height/2) - 10)
     myDeath.speed = math.random(20, 100) / 200
@@ -55,103 +57,101 @@ function CreateDeath()
 end
 
 function CreateBloodMage()
-    local myDeath = 
-    createSprite(listSprite, "bloodmage", "monster_", 2)
-    myDeath.x = math.random(10, Screen_Width - 10)
-    myDeath.y = math.random(10, (Screen_Height/2) - 10)
-    myDeath.speed = math.random(500, 2000) / 200
-    myDeath.range = math.random(200, 500)
-    myDeath.target = nil
+    local myBloodMage = 
+    createSprite(listSprite, "bloodmage", "bloodmage_", 2, imgBloodMage)
+    myBloodMage.x = math.random(10, Screen_Width - 10)
+    myBloodMage.y = math.random(10, (Screen_Height/2) - 10)
+    myBloodMage.speed = math.random(250, 400) / 200
+    myBloodMage.range = math.random(200, 500)
+    myBloodMage.target = nil
 
-    myDeath.state = ZSTATES.NONE
+    myBloodMage.state = ZSTATES.NONE
 end
 
 Monster.load = function()
-    --createDragon()
-
-
-
-    --for i = 1, 5 do
-        --createDeath()
-    --end
 end
 
-local function updateDeath(death)
-    if death.state == ZSTATES.NONE then
-        death.state = ZSTATES.CHANGEDIR
-    elseif death.state == ZSTATES.WALK then
+local function updateStates(monster)
+    if monster.state == ZSTATES.NONE then
+        monster.state = ZSTATES.CHANGEDIR
+    elseif monster.state == ZSTATES.WALK then
         --collide with border 
         local bordCollide = false
-        if death.x < 0 then
-            death.x = 0
+        if monster.x < 0 then
+            monster.x = 0
             bordCollide = true
         end
-        if death.x > Screen_Width then
-            death.x = Screen_Width
+        if monster.x > Screen_Width then
+            monster.x = Screen_Width
             bordCollide = true
         end
-        if death.y < 0 then
-            death.y = 0
+        if monster.y < 0 then
+            monster.y = 0
             bordCollide = true
         end
-        if death.y > Screen_Height then
-            death.y = Screen_Height
+        if monster.y > Screen_Height then
+            monster.y = Screen_Height
             bordCollide = true
         end
         if bordCollide then
-            death.state = ZSTATES.CHANGEDIR
+            monster.state = ZSTATES.CHANGEDIR
         end
-
         --look for hero 
-        
         if Hero.type == "hero" and Hero.visible == true then
-            local distance = math.dist(death.x, death.y, Hero.x, Hero.y)
-            if distance < death.range then
-                death.state = ZSTATES.ATTACK
-                death.target = Hero
-                CreateSpellFire(death.x-50, death.y-50, Hero.x -25, Hero.y-25, "bluefire")
-                --CreateSpellLife(death.x-50, death.y-50, Hero.x -25, Hero.y-25,"life")
+            local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
+            if distance < monster.range then
+                monster.state = ZSTATES.ATTACK
+                monster.target = Hero
+                CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
+                --CreateSpellLife(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25,"life")
                 CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
             end
         end
-        
-
-    elseif death.state == ZSTATES.ATTACK then
-        if death.target == nil then
-            death.state = ZSTATES.CHANGEDIR
-        elseif math.dist(death.x, death.y, death.target.x, death.target.y) > death.range and death.target.type == "hero" then
-            death.state = ZSTATES.CHANGEDIR
-        elseif math.dist(death.x, death.y, death.target.x, death.target.y) < 5 and death.target.type == "hero" then
-            death.state = ZSTATES.BITE
-            death.vx = 0
-            death.vy = 0
+    elseif monster.state == ZSTATES.ATTACK then
+        if monster.target == nil then
+            monster.state = ZSTATES.CHANGEDIR
+        elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > monster.range and monster.target.type == "hero" then
+            monster.state = ZSTATES.CHANGEDIR
+        elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) < 5 and monster.target.type == "hero" then
+            monster.state = ZSTATES.BITE
+            monster.vx = 0
+            monster.vy = 0
         else
             --attack
             local destX, destY
-            destX = math.random(death.target.x-20, death.target.x+20)
-            destY = math.random(death.target.y-20, death.target.y+20)
-            local angle = math.angle(death.x, death.y, destX, destY)
-            death.vx = death.speed* 2 * 60 * math.cos(angle)
-            death.vy = death.speed* 2 * 60 * math.sin(angle)
+            destX = math.random(monster.target.x-20, monster.target.x+20)
+            destY = math.random(monster.target.y-20, monster.target.y+20)
+            local angle = math.angle(monster.x, monster.y, destX, destY)
+            monster.vx = monster.speed* 2 * 60 * math.cos(angle)
+            monster.vy = monster.speed* 2 * 60 * math.sin(angle)
         end
-    elseif death.state == ZSTATES.BITE then
-        if math.dist(death.x, death.y, death.target.x, death.target.y) > 5 and death.target.type == "hero" then
-            death.state = ZSTATES.ATTACK
+    elseif monster.state == ZSTATES.BITE then
+        if math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > 5 and monster.target.type == "hero" then
+            monster.state = ZSTATES.ATTACK
         else
-            if death.target.hurt ~= nil then
-            death.target.hurt()
+            if monster.target.hurt ~= nil then
+            monster.target.hurt()
             end
-            if death.target.visible == false then
-                death.state = ZSTATES.CHANGEDIR
+            if monster.target.visible == false then
+                monster.state = ZSTATES.CHANGEDIR
             end
         end
-    elseif death.state == ZSTATES.CHANGEDIR then
-        local angle = math.angle(death.x, death.y, math.random(0, Screen_Width), math.random(0, Screen_Height))
-        death.vx = death.speed * 60 * math.cos(angle)
-        death.vy = death.speed * 60 * math.sin(angle)
-        death.state = ZSTATES.WALK
+    elseif monster.state == ZSTATES.CHANGEDIR then
+        local angle = math.angle(monster.x, monster.y, math.random(0, Screen_Width), math.random(0, Screen_Height))
+        monster.vx = monster.speed * 60 * math.cos(angle)
+        monster.vy = monster.speed * 60 * math.sin(angle)
+        monster.state = ZSTATES.WALK
     end
 end
+
+local function updateDeath(death)
+    updateStates(death)
+end
+
+local function updateBloodMage(bloodMage)
+    updateStates(bloodMage)
+end
+
 
 local function animeSprite(dt)
     for i, sprite in ipairs(listSprite) do
@@ -161,13 +161,12 @@ local function animeSprite(dt)
         end
         sprite.x = sprite.x + sprite.vx * dt
         sprite.y = sprite.y + sprite.vy * dt
-
-        -- if sprite.type == "zombie" then
-        --     updateDeath(sprite, listSprite)
-        -- end
         
-        if sprite.type == "zombie" then
+        if sprite.type == "death" then
             updateDeath(sprite, listSprite)
+        end
+        if sprite.type == "bloodmage" then
+            updateBloodMage(sprite, listSprite)
         end
     end
 end
@@ -176,13 +175,12 @@ Monster.update = function(dt)
     animeSprite(dt)
 end
 
-
-Monster.draw = function()
+local function drawMonster()
     for i, sprite in ipairs(listSprite) do
         if sprite.visible == true then
             local frame = sprite.img[math.floor(sprite.currentFrame)]
             love.graphics.draw(frame, sprite.x - (sprite.w/2)+Camera_x, sprite.y - (sprite.h/2)+Camera_y)
-            if sprite.type == "zombie" then
+            if sprite.type == "death" then
                 if love.keyboard.isDown("f5") then
                     love.graphics.print(sprite.state, sprite.x - 10+Camera_x, sprite.y - sprite.h - 10+Camera_y)
                 end
@@ -192,6 +190,10 @@ Monster.draw = function()
             end
         end
     end
+end
+
+Monster.draw = function()
+    drawMonster()
 end
 
 
