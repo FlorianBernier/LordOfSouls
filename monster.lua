@@ -49,8 +49,8 @@ function CreateDeath()
     createSprite(listSprite, "death", "death_", 2, imgDeath)
     myDeath.x = math.random(10, Screen_Width - 10)
     myDeath.y = math.random(10, (Screen_Height/2) - 10)
-    myDeath.speed = math.random(20, 100) / 200
-    myDeath.range = math.random(50, 200)
+    myDeath.speed = math.random(400) / 200
+    myDeath.range = math.random(0)
     myDeath.target = nil
 
     myDeath.state = ZSTATES.NONE
@@ -61,8 +61,8 @@ function CreateBloodMage()
     createSprite(listSprite, "bloodmage", "bloodmage_", 2, imgBloodMage)
     myBloodMage.x = math.random(10, Screen_Width - 10)
     myBloodMage.y = math.random(10, (Screen_Height/2) - 10)
-    myBloodMage.speed = math.random(250, 400) / 200
-    myBloodMage.range = math.random(200, 500)
+    myBloodMage.speed = math.random(100,200) / 200
+    myBloodMage.range = math.random(300,400)
     myBloodMage.target = nil
 
     myBloodMage.state = ZSTATES.NONE
@@ -71,43 +71,49 @@ end
 Monster.load = function()
 end
 
-local function updateStates(monster)
+local function statesCollideBorder(monster, x, y ,w ,h)
     if monster.state == ZSTATES.NONE then
         monster.state = ZSTATES.CHANGEDIR
     elseif monster.state == ZSTATES.WALK then
         --collide with border 
         local bordCollide = false
-        if monster.x < 0 then
-            monster.x = 0
+        if monster.x < x then
+            monster.x = x
             bordCollide = true
         end
-        if monster.x > Screen_Width then
-            monster.x = Screen_Width
+        if monster.x > w then
+            monster.x = w
             bordCollide = true
         end
-        if monster.y < 0 then
-            monster.y = 0
+        if monster.y < y then
+            monster.y = y
             bordCollide = true
         end
-        if monster.y > Screen_Height then
-            monster.y = Screen_Height
+        if monster.y > h then
+            monster.y = h
             bordCollide = true
         end
         if bordCollide then
             monster.state = ZSTATES.CHANGEDIR
         end
-        --look for hero 
-        if Hero.type == "hero" and Hero.visible == true then
-            local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
-            if distance < monster.range then
-                monster.state = ZSTATES.ATTACK
-                monster.target = Hero
-                CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
-                --CreateSpellLife(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25,"life")
-                CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
-            end
+    end
+end
+
+local function statesLookHero(monster)
+    --look for hero 
+    if Hero.type == "hero" and Hero.visible == true then
+        local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
+        if distance < monster.range then
+            monster.state = ZSTATES.ATTACK
+            monster.target = Hero
+            --CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
+            --CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
         end
-    elseif monster.state == ZSTATES.ATTACK then
+    end
+end
+
+local function statesAttack(monster)
+    if monster.state == ZSTATES.ATTACK then
         if monster.target == nil then
             monster.state = ZSTATES.CHANGEDIR
         elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > monster.range and monster.target.type == "hero" then
@@ -125,7 +131,11 @@ local function updateStates(monster)
             monster.vx = monster.speed* 2 * 60 * math.cos(angle)
             monster.vy = monster.speed* 2 * 60 * math.sin(angle)
         end
-    elseif monster.state == ZSTATES.BITE then
+    end
+end
+
+local function statesAttacCaC(monster)
+    if monster.state == ZSTATES.BITE then
         if math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > 5 and monster.target.type == "hero" then
             monster.state = ZSTATES.ATTACK
         else
@@ -137,7 +147,7 @@ local function updateStates(monster)
             end
         end
     elseif monster.state == ZSTATES.CHANGEDIR then
-        local angle = math.angle(monster.x, monster.y, math.random(0, Screen_Width), math.random(0, Screen_Height))
+        local angle = math.angle(monster.x, monster.y, math.random(0, Screen_Width), math.random(0, 1500))
         monster.vx = monster.speed * 60 * math.cos(angle)
         monster.vy = monster.speed * 60 * math.sin(angle)
         monster.state = ZSTATES.WALK
@@ -145,11 +155,17 @@ local function updateStates(monster)
 end
 
 local function updateDeath(death)
-    updateStates(death)
+    statesCollideBorder(death,0,100,400, 200)
+    statesLookHero(death)
+    statesAttack(death)
+    statesAttacCaC(death)
 end
 
 local function updateBloodMage(bloodMage)
-    updateStates(bloodMage)
+    statesCollideBorder(bloodMage,400,550, 800, 1500)
+    statesLookHero(bloodMage)
+    statesAttack(bloodMage)
+    statesAttacCaC(bloodMage)
 end
 
 
@@ -163,10 +179,10 @@ local function animeSprite(dt)
         sprite.y = sprite.y + sprite.vy * dt
         
         if sprite.type == "death" then
-            updateDeath(sprite, listSprite)
+            updateDeath(sprite)
         end
         if sprite.type == "bloodmage" then
-            updateBloodMage(sprite, listSprite)
+            updateBloodMage(sprite)
         end
     end
 end

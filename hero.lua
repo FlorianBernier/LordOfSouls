@@ -16,8 +16,8 @@ Hero.anim.img = love.graphics.newImage("images/personnage/fireMage.png")
 
 
 Hero.speed = 150
-Hero.x = 0
-Hero.y = 0
+Hero.x = 370
+Hero.y = 1500
 
 Hero.type = "hero"
 Hero.visible = true
