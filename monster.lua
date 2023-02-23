@@ -10,14 +10,17 @@ local VAR = {speedSprite = 7}
 
 local ZSTATES = {NONE = "", WALK = "walk", ATTACK = "attack", BITE = "bite", CHANGEDIR = "change"}
 
-local imgAlert = love.graphics.newImage("images copy/alert.png")
+local imgAlert = love.graphics.newImage("images/monster/type/action/alert.png")
 
 
 
-local imgMonster= {
-    love.graphics.newImage("images copy/deathTest.png"),
-    love.graphics.newImage("images copy/deathTest2.png")}
+local imgDeath = {
+    love.graphics.newImage("images/monster/type/death/deathTest.png"),
+    love.graphics.newImage("images/monster/type/death/deathTest2.png")}
 
+local imgBloodMage = {
+    love.graphics.newImage("images/monster/type/death/imgBloodMage1.png"),
+    love.graphics.newImage("images/monster/type/death/imgBloodMage2.png")}
 --- --- --- --- --- --- ---
 local listSprite = {}
 local function createSprite(pList, pType)
@@ -26,7 +29,7 @@ local function createSprite(pList, pType)
     mySprite.visible = true
     mySprite.img = {}
     mySprite.currentFrame = 1
-    mySprite.img = imgMonster
+    mySprite.img = imgDeath
 
     mySprite.x = 0
     mySprite.y = 0
@@ -39,7 +42,7 @@ local function createSprite(pList, pType)
     return mySprite
 end
 
-local function createDeath()
+function CreateDeath()
     local myDeath = 
     createSprite(listSprite, "zombie", "monster_", 2)
     myDeath.x = math.random(10, Screen_Width - 10)
@@ -49,12 +52,11 @@ local function createDeath()
     myDeath.target = nil
 
     myDeath.state = ZSTATES.NONE
-    
 end
 
-local function createDragon()
+function CreateBloodMage()
     local myDeath = 
-    createSprite(listSprite, "toto", "monster_", 2)
+    createSprite(listSprite, "bloodmage", "monster_", 2)
     myDeath.x = math.random(10, Screen_Width - 10)
     myDeath.y = math.random(10, (Screen_Height/2) - 10)
     myDeath.speed = math.random(500, 2000) / 200
@@ -65,10 +67,13 @@ local function createDragon()
 end
 
 Monster.load = function()
-    createDragon()
-    for i = 1, 5 do
-        createDeath()
-    end
+    --createDragon()
+
+
+
+    --for i = 1, 5 do
+        --createDeath()
+    --end
 end
 
 local function updateDeath(death)
@@ -161,7 +166,7 @@ local function animeSprite(dt)
         --     updateDeath(sprite, listSprite)
         -- end
         
-        if sprite.type == "toto" then
+        if sprite.type == "zombie" then
             updateDeath(sprite, listSprite)
         end
     end

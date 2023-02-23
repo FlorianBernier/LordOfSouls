@@ -9,6 +9,9 @@ local MyMonster = require("Monster")
 Entities.load = function()
     MyHero.load()
     MyMonster.load()
+    CreateDeath()
+
+    --CreateBloodMage()
 end
 
 

@@ -430,7 +430,7 @@ Game.TileTypes = {}
 
 
 function textureAtribution()
-    Game.TileSheet = love.graphics.newImage("images/TileSheetMap.png")
+    Game.TileSheet = love.graphics.newImage("images/map/TileSheetMap.png")
     local nbColumns = Game.TileSheet:getWidth() / Game.Map.TILE_WIDTH
     local nbLines = Game.TileSheet:getHeight() / Game.Map.TILE_HEIGHT
 

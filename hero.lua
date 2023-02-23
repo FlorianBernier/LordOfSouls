@@ -12,7 +12,7 @@ Hero.anim = {
     deathUp = {}, deathDown = {}, deathLeft = {}, deathRight = {},
 }
 
-Hero.anim.img = love.graphics.newImage("images/fireMage.png")
+Hero.anim.img = love.graphics.newImage("images/personnage/fireMage.png")
 
 
 Hero.speed = 150
