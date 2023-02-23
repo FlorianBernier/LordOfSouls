@@ -50,7 +50,7 @@ function CreateDeath()
     myDeath.x = math.random(10, Screen_Width - 10)
     myDeath.y = math.random(10, (Screen_Height/2) - 10)
     myDeath.speed = math.random(400) / 200
-    myDeath.range = math.random(0)
+    myDeath.range = math.random(200,300)
     myDeath.target = nil
 
     myDeath.state = ZSTATES.NONE
@@ -106,8 +106,8 @@ local function statesLookHero(monster)
         if distance < monster.range then
             monster.state = ZSTATES.ATTACK
             monster.target = Hero
-            --CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
-            --CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
+            CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
+            CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
         end
     end
 end
@@ -147,7 +147,7 @@ local function statesAttacCaC(monster)
             end
         end
     elseif monster.state == ZSTATES.CHANGEDIR then
-        local angle = math.angle(monster.x, monster.y, math.random(0, Screen_Width), math.random(0, 1500))
+        local angle = math.angle(monster.x, monster.y, math.random(0, Screen_Width), math.random(0, Screen_Height))
         monster.vx = monster.speed * 60 * math.cos(angle)
         monster.vy = monster.speed * 60 * math.sin(angle)
         monster.state = ZSTATES.WALK
@@ -162,7 +162,7 @@ local function updateDeath(death)
 end
 
 local function updateBloodMage(bloodMage)
-    statesCollideBorder(bloodMage,400,550, 800, 1500)
+    statesCollideBorder(bloodMage,400,100, 800, 200)
     statesLookHero(bloodMage)
     statesAttack(bloodMage)
     statesAttacCaC(bloodMage)

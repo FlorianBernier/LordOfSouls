@@ -173,6 +173,10 @@ function CreateSpellBluefire(x,y,dx,dy,name)
         frameMax = 61,
         frameSpeed = 8,
     }
+    local distance = math.dist(x, y, Hero.x, Hero.y)
+    if distance <= 50 then
+        Hero.life = Hero.life - 10
+    end
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
@@ -196,7 +200,10 @@ function CreateSpellBrightfire(x,y,dx,dy,name)
         frameMax = 61,
         frameSpeed = 8,
     }
-    Hero.life = Hero.life - 10
+    local distance = math.dist(x, y, Hero.x, Hero.y)
+    if distance <= 50 then
+        Hero.life = Hero.life - 10
+    end
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
