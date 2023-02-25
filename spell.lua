@@ -54,8 +54,16 @@ function CreateSpellFire(x,y,dx,dy,name)
         frameSpeed = 12,
     }
 
-    Death.life = Death.life - 100
-    BloodMage.life = BloodMage.life - 100
+    -- Vérifie si le sort touche le monstre
+    
+        local distance = math.sqrt((Death.x - spell.x)^2 + (Death.y - spell.y)^2)
+        if distance <= Death.x and Death.y then
+            -- Le sort touche le monstre, faites-le perdre de la vie
+            Death.life = Death.life - 100
+        
+    end
+    --Death.life = Death.life - 100
+    --BloodMage.life = BloodMage.life - 100
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed

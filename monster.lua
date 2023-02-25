@@ -48,6 +48,7 @@ function CreateDeath()
     Death = createSprite(listSprite, "death", "death_", 2, imgDeath)
     Death.x = math.random(10, Screen_Width - 10)
     Death.y = math.random(10, (Screen_Height/2) - 10)
+    Death.size = 100
     Death.speed = math.random(400) / 200
     Death.range = math.random(200,300)
     Death.target = nil
