@@ -52,14 +52,9 @@ function CreateSpellFire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 12,
+        degat = 100
     }
 
-
-    
-
-    --Death.life = Death.life - 100
-    --BloodMage.life = BloodMage.life - 100
-    
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
 
@@ -81,6 +76,7 @@ function CreateSpellMidnight(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 12,
+        degat = 10
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -228,7 +224,7 @@ local function updateSpellAnim(dt)
         s.frame = s.frame + s.frameSpeed * dt
         local distance = Dist_P_P(Death.x, Death.y, s.x, s.y)
         if distance <= Death.size then
-            Death.life = Death.life - 10
+            Death.life = Death.life - s.degat
         end
         if s.frame > 61 then
             table.remove(listeSpells, i)
