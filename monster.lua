@@ -48,10 +48,10 @@ function CreateDeath()
     Death = createSprite(listSprite, "death", "death_", 2, imgDeath)
     Death.x = math.random(10, Screen_Width - 10)
     Death.y = math.random(10, (Screen_Height/2) - 10)
-    Death.size = 100
     Death.speed = math.random(400) / 200
     Death.range = math.random(200,300)
     Death.target = nil
+    Death.size = 100
     Death.life = 5000
     Death.timeSpellFire = 0
     Death.timeSpellBrightFire = 0
@@ -209,8 +209,12 @@ Monster.update = function(dt)
 end
 
 local function drawMonster()
+    if Death.life > 0 then
     love.graphics.print(math.floor(Death.life), Death.x+Camera_x,Death.y-50+Camera_y)
+    end
+    if BloodMage.life > 0 then
     love.graphics.print(math.floor(BloodMage.life), BloodMage.x+Camera_x,BloodMage.y-50+Camera_y)
+    end
     for i, sprite in ipairs(listSprite) do
         if sprite.visible == true then
             local frame = sprite.img[math.floor(sprite.currentFrame)]

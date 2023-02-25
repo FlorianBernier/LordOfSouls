@@ -56,10 +56,12 @@ function CreateSpellFire(x,y,dx,dy,name)
 
     -- Vérifie si le sort touche le monstre
     
-        local distance = math.sqrt((Death.x - spell.x)^2 + (Death.y - spell.y)^2)
-        if distance <= Death.x and Death.y then
+        local distance = Dist_P_P(Death.x, Death.y, spell.x, spell.y)
+        print("dist",distance, Death.x, Death.y, spell.x, spell.y)
+        if distance <= Death.size then
             -- Le sort touche le monstre, faites-le perdre de la vie
             Death.life = Death.life - 100
+            print(Death.life)
         
     end
     --Death.life = Death.life - 100
