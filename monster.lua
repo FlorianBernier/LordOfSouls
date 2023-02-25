@@ -45,32 +45,32 @@ local function createSprite(pList, pType, pImgFileName, pFrame, pimgMonstre)
 end
 
 function CreateDeath()
-    local myDeath = 
-    createSprite(listSprite, "death", "death_", 2, imgDeath)
-    myDeath.x = math.random(10, Screen_Width - 10)
-    myDeath.y = math.random(10, (Screen_Height/2) - 10)
-    myDeath.speed = math.random(400) / 200
-    myDeath.range = math.random(200,300)
-    myDeath.target = nil
-    myDeath.timeSpellFire = 0
-    myDeath.timeSpellBrightFire = 0
+    Death = createSprite(listSprite, "death", "death_", 2, imgDeath)
+    Death.x = math.random(10, Screen_Width - 10)
+    Death.y = math.random(10, (Screen_Height/2) - 10)
+    Death.speed = math.random(400) / 200
+    Death.range = math.random(200,300)
+    Death.target = nil
+    Death.life = 5000
+    Death.timeSpellFire = 0
+    Death.timeSpellBrightFire = 0
 
-    myDeath.state = ZSTATES.NONE
+    Death.state = ZSTATES.NONE
 end
 
 function CreateBloodMage()
-    local myBloodMage = 
-    createSprite(listSprite, "bloodmage", "bloodmage_", 2, imgBloodMage)
-    myBloodMage.x = math.random(10, Screen_Width - 10)
-    myBloodMage.y = math.random(10, (Screen_Height/2) - 10)
-    myBloodMage.speed = math.random(100,200) / 200
-    myBloodMage.range = math.random(300,400)
-    myBloodMage.target = nil
-    myBloodMage.timeSpellFire = 0
-    myBloodMage.timeSpellBrightFire = 0
+    BloodMage = createSprite(listSprite, "bloodmage", "bloodmage_", 2, imgBloodMage)
+    BloodMage.x = math.random(10, Screen_Width - 10)
+    BloodMage.y = math.random(10, (Screen_Height/2) - 10)
+    BloodMage.speed = math.random(100,200) / 200
+    BloodMage.range = math.random(300,400)
+    BloodMage.target = nil
+    BloodMage.life = 4000
+    BloodMage.timeSpellFire = 0
+    BloodMage.timeSpellBrightFire = 0
 
 
-    myBloodMage.state = ZSTATES.NONE
+    BloodMage.state = ZSTATES.NONE
 end
 
 Monster.load = function()
@@ -193,6 +193,9 @@ local function animeSprite(dt)
         
         if sprite.type == "death" then
             updateDeath(sprite)
+            if Death.life <= 0 then
+                table.remove(listSprite, i)
+            end
         end
         if sprite.type == "bloodmage" then
             updateBloodMage(sprite)
@@ -205,6 +208,8 @@ Monster.update = function(dt)
 end
 
 local function drawMonster()
+    love.graphics.print(math.floor(Death.life), Death.x+Camera_x,Death.y-50+Camera_y)
+    love.graphics.print(math.floor(BloodMage.life), BloodMage.x+Camera_x,BloodMage.y-50+Camera_y)
     for i, sprite in ipairs(listSprite) do
         if sprite.visible == true then
             local frame = sprite.img[math.floor(sprite.currentFrame)]

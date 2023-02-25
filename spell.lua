@@ -53,6 +53,9 @@ function CreateSpellFire(x,y,dx,dy,name)
         frameMax = 61,
         frameSpeed = 12,
     }
+
+    Death.life = Death.life - 100
+    BloodMage.life = BloodMage.life - 100
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
