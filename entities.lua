@@ -10,12 +10,12 @@ Entities.load = function()
     MyHero.load()
     MyMonster.load()
     CreateDeath()
-    CreateDeath()
-    CreateDeath()
+    --CreateDeath()
+    --CreateDeath()
 
     CreateBloodMage()
-    CreateBloodMage()
-    CreateBloodMage()
+    --CreateBloodMage()
+    --CreateBloodMage()
 
 end
 

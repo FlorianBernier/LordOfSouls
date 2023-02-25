@@ -52,7 +52,8 @@ function CreateDeath()
     myDeath.speed = math.random(400) / 200
     myDeath.range = math.random(200,300)
     myDeath.target = nil
-    myDeath.timeSpell = 0
+    myDeath.timeSpellFire = 0
+    myDeath.timeSpellBrightFire = 0
 
     myDeath.state = ZSTATES.NONE
 end
@@ -65,7 +66,9 @@ function CreateBloodMage()
     myBloodMage.speed = math.random(100,200) / 200
     myBloodMage.range = math.random(300,400)
     myBloodMage.target = nil
-    myBloodMage.timeSpell = 0
+    myBloodMage.timeSpellFire = 0
+    myBloodMage.timeSpellBrightFire = 0
+
 
     myBloodMage.state = ZSTATES.NONE
 end
@@ -108,10 +111,14 @@ local function statesLookHero(monster)
         if distance < monster.range then
             monster.state = ZSTATES.ATTACK
             monster.target = Hero
-            monster.timeSpell = monster.timeSpell - 1
-            if monster.timeSpell <= 0 then
-                monster.timeSpell = 30
+            monster.timeSpellFire = monster.timeSpellFire - 1
+            monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
+            if monster.timeSpellFire <= 0 then
+                monster.timeSpellFire = 100
                 CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
+            end
+                if monster.timeSpellBrightFire <= 0 then
+                monster.timeSpellBrightFire = 500
                 CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
             end
         end

@@ -17,8 +17,8 @@ SetFullScreen = false
 Scale_x = 1 Scale_y = 1
 --sets up mouse variables
 Mouse_x = 0 Mouse_y = 0
---sets up camera variables
-Camera_x = 0 Camera_y = -1500 Camera_speed = 300
+--sets up camera variables Camera_y = -1500
+Camera_x = 0 Camera_y = -200 Camera_speed = 300
 --sets up window variables
 Window = {translate={x=0, y=0}, zoom=1}
 Dscale = 2^(1/6) -- six times wheel movement changes the zoom twice; exponential zoom only
