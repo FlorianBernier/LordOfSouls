@@ -51,8 +51,8 @@ function CreateDeath()
     Death.speed = math.random(400) / 200
     Death.range = math.random(200,300)
     Death.target = nil
-    Death.size = 100
-    Death.life = 5000
+    Death.size = 50
+    Death.life = 100000
     Death.timeSpellFire = 0
     Death.timeSpellBrightFire = 0
 

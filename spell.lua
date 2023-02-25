@@ -54,16 +54,9 @@ function CreateSpellFire(x,y,dx,dy,name)
         frameSpeed = 12,
     }
 
-    -- Vérifie si le sort touche le monstre
+
     
-        local distance = Dist_P_P(Death.x, Death.y, spell.x, spell.y)
-        print("dist",distance, Death.x, Death.y, spell.x, spell.y)
-        if distance <= Death.size then
-            -- Le sort touche le monstre, faites-le perdre de la vie
-            Death.life = Death.life - 100
-            print(Death.life)
-        
-    end
+
     --Death.life = Death.life - 100
     --BloodMage.life = BloodMage.life - 100
     
@@ -233,10 +226,15 @@ local function updateSpellAnim(dt)
         s.x = s.x + s.vx * dt
         s.y = s.y + s.vy * dt
         s.frame = s.frame + s.frameSpeed * dt
+        local distance = Dist_P_P(Death.x, Death.y, s.x, s.y)
+        if distance <= Death.size then
+            Death.life = Death.life - 10
+        end
         if s.frame > 61 then
             table.remove(listeSpells, i)
         end
     end
+    
     
 end
 
