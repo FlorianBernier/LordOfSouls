@@ -77,7 +77,7 @@ function CreateSpellMidnight(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 12,
-        degat = 10
+        degat = 50
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -101,7 +101,7 @@ function CreateSpellLife(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
-        heal = 10,
+        heal = 100,
         
 
         
@@ -176,10 +176,11 @@ function CreateSpellBluefire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
+        degat = 2000
     }
     
     
-    Hero.life = Hero.life - 10
+    --Hero.life = Hero.life - 1000
     
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -203,12 +204,8 @@ function CreateSpellBrightfire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
+        degat = 300
     }
-    
-    
-    Hero.life = Hero.life - 10
-    
-    
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
 
@@ -240,6 +237,9 @@ local function updateSpellHero(dt)
             local distHero = Dist_P_P(Hero.x-25, Hero.y-25, s.x, s.y)
             if distHero <= Hero.size then
                 Hero.life = Hero.life + s.heal
+                if Hero.life > Hero.lifeMax then
+                    Hero.life = Hero.lifeMax
+                end
             end
         end
 
@@ -251,10 +251,15 @@ local function updateSpellHero(dt)
                 table.remove(listeSpells, i)
                 Hero.spellStart = love.timer.getTime() -- stocker le moment où le héros devient invisible
                 Hero.visible = false -- rendre le héros invisible
+            elseif distBloodMage <= BloodMage.size then
+                Hero.spellStart = nil
+                table.remove(listeSpells, i)
+                Hero.spellStart = love.timer.getTime()
+                Hero.visible = false
             end
         end
         if Hero.spellStart then
-            print("start", Hero.spellStart)
+            --print("start", Hero.spellStart)
             local invisibilityDuration = 5
             if love.timer.getTime() < math.floor(Hero.spellStart) + invisibilityDuration then
                 Hero.visible = false 
@@ -264,22 +269,36 @@ local function updateSpellHero(dt)
             end
         end
         
-    
-    
-    
-        
+       
 
         if s.frame > 61 then
             table.remove(listeSpells, i)
         end
         
     end
-    
-    
+end
+
+local function updateSpellMonster(dt)
+    for i = #listeSpells, 1, -1 do
+        local s = listeSpells[i]
+        s.x = s.x + s.vx * dt
+        s.y = s.y + s.vy * dt
+        s.frame = s.frame + s.frameSpeed * dt
+
+        
+        
+        if s.name == "bluefire" or  s.name == "brightfire" then
+            local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
+            if distHero <= Hero.size then
+                Hero.life = Hero.life - s.degat
+            end
+        end
+    end
 end
 
 Spell.update = function(dt)
     updateSpellHero(dt)
+    updateSpellMonster(dt)
 end
 
 

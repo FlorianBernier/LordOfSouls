@@ -53,7 +53,7 @@ function CreateDeath()
     Death.target = nil
     Death.size = 50
     Death.life = 30000
-    Death.timeSpellFire = 0
+    Death.timeSpellBlueFire = 0
     Death.timeSpellBrightFire = 0
 
     Death.state = STATES.NONE
@@ -68,7 +68,7 @@ function CreateBloodMage()
     BloodMage.target = nil
     BloodMage.size = 50
     BloodMage.life = 50000
-    BloodMage.timeSpellFire = 0
+    BloodMage.timeSpellBlueFire = 0
     BloodMage.timeSpellBrightFire = 0
 
 
@@ -113,14 +113,14 @@ local function statesLookHero(monster)
         if distance < monster.range then
             monster.state = STATES.ATTACK
             monster.target = Hero
-            monster.timeSpellFire = monster.timeSpellFire - 1
+            monster.timeSpellBlueFire = monster.timeSpellBlueFire - 1
             monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
-            if monster.timeSpellFire <= 0 then
-                monster.timeSpellFire = 100
+            if monster.timeSpellBlueFire <= 0 then
+                monster.timeSpellBlueFire = 50
                 CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
             end
                 if monster.timeSpellBrightFire <= 0 then
-                monster.timeSpellBrightFire = 500
+                monster.timeSpellBrightFire = 100
                 CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
             end
         end
@@ -202,6 +202,9 @@ local function animeSprite(dt)
         end
         if sprite.type == "bloodmage" then
             updateBloodMage(sprite)
+            if BloodMage.life <= 0 then
+                table.remove(listSprite, i)
+            end
         end
     end
 end
