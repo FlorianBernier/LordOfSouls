@@ -128,7 +128,7 @@ function CreateSpellPhantom(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
-        timer = nil
+        
         
         
     }
@@ -247,27 +247,23 @@ local function updateSpellHero(dt)
             local distDeath = Dist_P_P(Death.x-50, Death.y-50, s.x, s.y)
             local distBloodMage = Dist_P_P(BloodMage.x-50, BloodMage.y-50, s.x, s.y)
             if distDeath <= Death.size then
+                Hero.spellStart = nil
                 table.remove(listeSpells, i)
-                Hero.invisibilityStartTime = love.timer.getTime() -- stocker le moment où le héros devient invisible
+                Hero.spellStart = love.timer.getTime() -- stocker le moment où le héros devient invisible
                 Hero.visible = false -- rendre le héros invisible
             end
-            if distBloodMage <= BloodMage.size then
-                table.remove(listeSpells, i)
-                Hero.invisibilityStartTime = love.timer.getTime() -- stocker le moment où le héros devient invisible
-                Hero.visible = false -- rendre le héros invisible
-            end
-
         end
-        
-        if Hero.invisibilityStartTime then
-            local invisibilityDuration = 5 
-            if love.timer.getTime() < Hero.invisibilityStartTime + invisibilityDuration then
+        if Hero.spellStart then
+            print("start", Hero.spellStart)
+            local invisibilityDuration = 5
+            if love.timer.getTime() < math.floor(Hero.spellStart) + invisibilityDuration then
                 Hero.visible = false 
             else
-                Hero.invisibilityStartTime = nil -- réinitialiser la variable de début d'invisibilité
-                Hero.visible = true -- rendre le héros visible de nouveau
+                Hero.visible = true 
+                Hero.spellStart = nil -- Réinitialiser la variable de début d'invisibilité
             end
         end
+        
     
     
     
