@@ -104,11 +104,11 @@ local function statesCollideBorder(monster, x, y ,w ,h)
             monster.state = STATES.CHANGEDIR
         end
     end
-end
+end 
 
 local function statesLookHero(monster)
     --look for hero 
-    if Hero.type == "hero" and Hero.visible == true then
+    if Hero.type == "hero" and Hero.visible then
         local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
         if distance < monster.range then
             monster.state = STATES.ATTACK
@@ -168,11 +168,7 @@ local function statesAttacCaC(monster)
         monster.state = STATES.WALK
     end
 end
---- --- ---
-function StatesChangeDir2(monster)
-    monster.state = STATES.CHANGEDIR2
-    
-end
+
 
 local function updateDeath(death)
     statesCollideBorder(death,0,100,400, 200)

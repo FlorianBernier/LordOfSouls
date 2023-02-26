@@ -21,7 +21,9 @@ Hero.y = 600--1500
 Hero.size = 50
 
 Hero.type = "hero"
+
 Hero.visible = true
+
 Hero.life = 100000
 Hero.hurt = function()
     Hero.life = Hero.life - 0.1

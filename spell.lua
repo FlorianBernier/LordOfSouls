@@ -1,6 +1,7 @@
 local Spell = {}
 Spell.quad = {}
 
+
 Spell.anim = {
     ["fire"]     = love.graphics.newImage("images/spell/fire.png") ,
     ["midnight"] = love.graphics.newImage("images/spell/midnight.png"),
@@ -127,6 +128,9 @@ function CreateSpellPhantom(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
+        timer = nil
+        
+        
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -243,13 +247,31 @@ local function updateSpellHero(dt)
             local distDeath = Dist_P_P(Death.x-50, Death.y-50, s.x, s.y)
             local distBloodMage = Dist_P_P(BloodMage.x-50, BloodMage.y-50, s.x, s.y)
             if distDeath <= Death.size then
-                Death.state = STATES.CHANGEDIR2
+                table.remove(listeSpells, i)
+                Hero.invisibilityStartTime = love.timer.getTime() -- stocker le moment où le héros devient invisible
+                Hero.visible = false -- rendre le héros invisible
             end
             if distBloodMage <= BloodMage.size then
-                BloodMage.state = STATES.CHANGEDIR2
+                table.remove(listeSpells, i)
+                Hero.invisibilityStartTime = love.timer.getTime() -- stocker le moment où le héros devient invisible
+                Hero.visible = false -- rendre le héros invisible
+            end
+
+        end
+        
+        if Hero.invisibilityStartTime then
+            local invisibilityDuration = 5 
+            if love.timer.getTime() < Hero.invisibilityStartTime + invisibilityDuration then
+                Hero.visible = false 
+            else
+                Hero.invisibilityStartTime = nil -- réinitialiser la variable de début d'invisibilité
+                Hero.visible = true -- rendre le héros visible de nouveau
             end
         end
-
+    
+    
+    
+        
 
         if s.frame > 61 then
             table.remove(listeSpells, i)
