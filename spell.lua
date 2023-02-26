@@ -100,13 +100,11 @@ function CreateSpellLife(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
-        bonusHeal = 10,
+        heal = 10,
+        
 
         
     }
-    
-    Hero.life = Hero.life + spell.bonusHeal
-    
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
 
@@ -215,27 +213,55 @@ end
 
 
 
-local function updateSpellAnim(dt)
+local function updateSpellHero(dt)
     for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]
-
         s.x = s.x + s.vx * dt
         s.y = s.y + s.vy * dt
         s.frame = s.frame + s.frameSpeed * dt
-        local distance = Dist_P_P(Death.x, Death.y, s.x, s.y)
-        if distance <= Death.size then
-            Death.life = Death.life - s.degat
+
+        
+        
+        if s.name == "fire" or  s.name == "midnight" then
+            local distDeath = Dist_P_P(Death.x-50, Death.y-50, s.x, s.y)
+            local distBloodMage = Dist_P_P(BloodMage.x-50, BloodMage.y-50, s.x, s.y)
+            if distDeath <= Death.size then
+                Death.life = Death.life - s.degat
+            end
+            if distBloodMage <= BloodMage.size then
+                BloodMage.life = BloodMage.life - s.degat
+            end
         end
+        if s.name == "life" then
+            local distHero = Dist_P_P(Hero.x-25, Hero.y-25, s.x, s.y)
+            if distHero <= Hero.size then
+                Hero.life = Hero.life + s.heal
+            end
+        end
+
+        if s.name == "phantom" then
+            local distDeath = Dist_P_P(Death.x-50, Death.y-50, s.x, s.y)
+            local distBloodMage = Dist_P_P(BloodMage.x-50, BloodMage.y-50, s.x, s.y)
+            if distDeath <= Death.size then
+                Death.state = STATES.CHANGEDIR2
+            end
+            if distBloodMage <= BloodMage.size then
+                BloodMage.state = STATES.CHANGEDIR2
+            end
+        end
+
+
         if s.frame > 61 then
             table.remove(listeSpells, i)
         end
+        
     end
     
     
 end
 
 Spell.update = function(dt)
-    updateSpellAnim(dt)
+    updateSpellHero(dt)
 end
 
 
@@ -257,7 +283,7 @@ local function changeDirSpell(x, y, button)
     if button == 1 then
         for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]
-            if s.name == "fire" or  s.name == "midnight" then
+            if s.name == "fire" or  s.name == "midnight" or s.name == "phantom" then
             s.dx = x
             s.dy = y
             s.angle = math.atan2(s.dy-s.y, s.dx-s.x)

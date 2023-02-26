@@ -1,4 +1,4 @@
-local Monster = {}
+Monster = {}
 
 -- Returns the distance between two points.
 function math.dist(x1,y1, x2,y2) return ((x2-x1)^2+(y2-y1)^2)^0.5 end
@@ -8,7 +8,7 @@ function math.angle(x1,y1, x2,y2) return math.atan2(y2-y1, x2-x1) end
 
 local VAR = {speedSprite = 7}
 
-local ZSTATES = {NONE = "", WALK = "walk", ATTACK = "attack", BITE = "bite", CHANGEDIR = "change"}
+STATES = {NONE = "", WALK = "walk", ATTACK = "attack", BITE = "bite", CHANGEDIR = "change", CHANGEDIR2 = false}
 
 local imgAlert = love.graphics.newImage("images/monster/type/action/alert.png")
 
@@ -52,11 +52,11 @@ function CreateDeath()
     Death.range = math.random(200,300)
     Death.target = nil
     Death.size = 50
-    Death.life = 100000
+    Death.life = 30000
     Death.timeSpellFire = 0
     Death.timeSpellBrightFire = 0
 
-    Death.state = ZSTATES.NONE
+    Death.state = STATES.NONE
 end
 
 function CreateBloodMage()
@@ -66,21 +66,22 @@ function CreateBloodMage()
     BloodMage.speed = math.random(100,200) / 200
     BloodMage.range = math.random(300,400)
     BloodMage.target = nil
-    BloodMage.life = 4000
+    BloodMage.size = 50
+    BloodMage.life = 50000
     BloodMage.timeSpellFire = 0
     BloodMage.timeSpellBrightFire = 0
 
 
-    BloodMage.state = ZSTATES.NONE
+    BloodMage.state = STATES.NONE
 end
 
 Monster.load = function()
 end
 
 local function statesCollideBorder(monster, x, y ,w ,h)
-    if monster.state == ZSTATES.NONE then
-        monster.state = ZSTATES.CHANGEDIR
-    elseif monster.state == ZSTATES.WALK then
+    if monster.state == STATES.NONE then
+        monster.state = STATES.CHANGEDIR
+    elseif monster.state == STATES.WALK then
         --collide with border 
         local bordCollide = false
         if monster.x < x then
@@ -100,7 +101,7 @@ local function statesCollideBorder(monster, x, y ,w ,h)
             bordCollide = true
         end
         if bordCollide then
-            monster.state = ZSTATES.CHANGEDIR
+            monster.state = STATES.CHANGEDIR
         end
     end
 end
@@ -110,7 +111,7 @@ local function statesLookHero(monster)
     if Hero.type == "hero" and Hero.visible == true then
         local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
         if distance < monster.range then
-            monster.state = ZSTATES.ATTACK
+            monster.state = STATES.ATTACK
             monster.target = Hero
             monster.timeSpellFire = monster.timeSpellFire - 1
             monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
@@ -127,13 +128,13 @@ local function statesLookHero(monster)
 end
 
 local function statesAttack(monster)
-    if monster.state == ZSTATES.ATTACK then
+    if monster.state == STATES.ATTACK then
         if monster.target == nil then
-            monster.state = ZSTATES.CHANGEDIR
+            monster.state = STATES.CHANGEDIR
         elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > monster.range and monster.target.type == "hero" then
-            monster.state = ZSTATES.CHANGEDIR
+            monster.state = STATES.CHANGEDIR
         elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) < 5 and monster.target.type == "hero" then
-            monster.state = ZSTATES.BITE
+            monster.state = STATES.BITE
             monster.vx = 0
             monster.vy = 0
         else
@@ -149,23 +150,28 @@ local function statesAttack(monster)
 end
 
 local function statesAttacCaC(monster)
-    if monster.state == ZSTATES.BITE then
+    if monster.state == STATES.BITE then
         if math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > 5 and monster.target.type == "hero" then
-            monster.state = ZSTATES.ATTACK
+            monster.state = STATES.ATTACK
         else
             if monster.target.hurt ~= nil then
             monster.target.hurt()
             end
             if monster.target.visible == false then
-                monster.state = ZSTATES.CHANGEDIR
+                monster.state = STATES.CHANGEDIR
             end
         end
-    elseif monster.state == ZSTATES.CHANGEDIR then
+    elseif monster.state == STATES.CHANGEDIR then
         local angle = math.angle(monster.x, monster.y, math.random(0, Screen_Width), math.random(0, Screen_Height))
         monster.vx = monster.speed * 60 * math.cos(angle)
         monster.vy = monster.speed * 60 * math.sin(angle)
-        monster.state = ZSTATES.WALK
+        monster.state = STATES.WALK
     end
+end
+--- --- ---
+function StatesChangeDir2(monster)
+    monster.state = STATES.CHANGEDIR2
+    
 end
 
 local function updateDeath(death)
@@ -223,7 +229,7 @@ local function drawMonster()
                 if love.keyboard.isDown("f5") then
                     love.graphics.print(sprite.state, sprite.x - 10+Camera_x, sprite.y - sprite.h - 10+Camera_y)
                 end
-                if sprite.state == ZSTATES.ATTACK then
+                if sprite.state == STATES.ATTACK then
                     love.graphics.draw(imgAlert, sprite.x - imgAlert:getWidth()/2+Camera_x, sprite.y+50 - sprite.h - 2+Camera_y)
                 end
             end
