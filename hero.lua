@@ -24,7 +24,7 @@ Hero.type = "hero"
 
 Hero.visible = true
 
-Hero.life = 100000
+Hero.life = 100000000000
 Hero.lifeMax = 100000
 Hero.hurt = function()
     Hero.life = Hero.life - 0.1

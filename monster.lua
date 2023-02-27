@@ -22,30 +22,23 @@ local imgBloodMage = {
     love.graphics.newImage("images/monster/type/bloodMage/bloodMage1.png"),
     love.graphics.newImage("images/monster/type/bloodMage/bloodMage2.png")}
 --- --- --- --- --- --- ---
-local listSprite = {}
-local function createSprite(pList, pType, pImgFileName, pFrame, pimgMonstre)
-    local mySprite = {}
-    mySprite.type = pType
-    mySprite.visible = true
-    mySprite.img = {}
-    mySprite.currentFrame = 1
-    for i = 1, #pimgMonstre do
-        table.insert(mySprite.img, pimgMonstre[i])
-    end
-
-    mySprite.x = 0
-    mySprite.y = 0
-    mySprite.vx = 0
-    mySprite.vy = 0
-    mySprite.w = mySprite.img[1]:getWidth()
-    mySprite.h = mySprite.img[1]:getHeight()
-
-    table.insert(pList, mySprite)
-    return mySprite
-end
+ListMonstre = {}
 
 function CreateDeath()
-    Death = createSprite(listSprite, "death", "death_", 2, imgDeath)
+    Death = {}
+    Death.type = "death"
+    Death.visible = true
+    Death.currentFrame = 1
+    Death.img = {}
+    for i = 1, #imgDeath do
+        table.insert(Death.img, imgDeath[i])
+    end
+    Death.x = 0
+    Death.y = 0
+    Death.vx = 0
+    Death.vy = 0
+    Death.w = Death.img[1]:getWidth()
+    Death.h = Death.img[1]:getHeight()    
     Death.x = math.random(10, Screen_Width - 10)
     Death.y = math.random(10, (Screen_Height/2) - 10)
     Death.speed = math.random(400) / 200
@@ -55,12 +48,27 @@ function CreateDeath()
     Death.life = 30000
     Death.timeSpellBlueFire = 0
     Death.timeSpellBrightFire = 0
-
+    Death.blind = false
+    Death.blindTimer = 0
     Death.state = STATES.NONE
+    table.insert(ListMonstre, Death)
 end
 
 function CreateBloodMage()
-    BloodMage = createSprite(listSprite, "bloodmage", "bloodmage_", 2, imgBloodMage)
+    BloodMage = {}
+    BloodMage.type = "bloodmage"
+    BloodMage.visible = true
+    BloodMage.currentFrame = 1
+    BloodMage.img = {}
+    for i = 1, #imgBloodMage do
+        table.insert(BloodMage.img, imgBloodMage[i])
+    end
+    BloodMage.x = 0
+    BloodMage.y = 0
+    BloodMage.vx = 0
+    BloodMage.vy = 0
+    BloodMage.w = BloodMage.img[1]:getWidth()
+    BloodMage.h = BloodMage.img[1]:getHeight()    
     BloodMage.x = math.random(10, Screen_Width - 10)
     BloodMage.y = math.random(10, (Screen_Height/2) - 10)
     BloodMage.speed = math.random(100,200) / 200
@@ -70,9 +78,10 @@ function CreateBloodMage()
     BloodMage.life = 50000
     BloodMage.timeSpellBlueFire = 0
     BloodMage.timeSpellBrightFire = 0
-
-
+    BloodMage.blind = false
+    BloodMage.blindTimer = 0
     BloodMage.state = STATES.NONE
+    table.insert(ListMonstre, BloodMage)
 end
 
 Monster.load = function()
@@ -186,24 +195,37 @@ end
 
 
 local function animeSprite(dt)
-    for i, sprite in ipairs(listSprite) do
-        sprite.currentFrame = sprite.currentFrame + VAR.speedSprite*dt
-        if sprite.currentFrame >= #sprite.img+1 then-- +1: du fait d'avoir utiliser math.floor(frame)
-            sprite.currentFrame = 1
-        end
-        sprite.x = sprite.x + sprite.vx * dt
-        sprite.y = sprite.y + sprite.vy * dt
-        
-        if sprite.type == "death" then
-            updateDeath(sprite)
-            if Death.life <= 0 then
-                table.remove(listSprite, i)
+    for i = #ListMonstre, 1, -1 do
+        local monstre = ListMonstre[i]
+        monstre.blindTimer = monstre.blindTimer - dt
+        if monstre.blind and monstre.blindTimer >= 0 then
+            monstre.range = 0
+        elseif monstre.blind and monstre.blindTimer < 0 then
+            monstre.blind = false
+            if monstre.type == "death" then
+                monstre.range = math.random(200,300)
+            end
+            if monstre.type == "bloodmage" then
+                monstre.range = math.random(300,400)
             end
         end
-        if sprite.type == "bloodmage" then
-            updateBloodMage(sprite)
-            if BloodMage.life <= 0 then
-                table.remove(listSprite, i)
+
+        monstre.currentFrame = monstre.currentFrame + VAR.speedSprite*dt
+        if monstre.currentFrame >= #monstre.img+1 then-- +1: du fait d'avoir utiliser math.floor(frame)
+            monstre.currentFrame = 1
+        end
+        monstre.x = monstre.x + monstre.vx * dt
+        monstre.y = monstre.y + monstre.vy * dt
+        if monstre.type == "death" then
+            updateDeath(monstre)
+            if monstre.life <= 0 then
+                table.remove(ListMonstre, i)
+            end
+        end
+        if monstre.type == "bloodmage" then
+            updateBloodMage(monstre)
+            if monstre.life <= 0 then
+                table.remove(ListMonstre, i)
             end
         end
     end
@@ -214,13 +236,13 @@ Monster.update = function(dt)
 end
 
 local function drawMonster()
-    if Death.life > 0 then
-    love.graphics.print(math.floor(Death.life), Death.x+Camera_x,Death.y-50+Camera_y)
+    for i = #ListMonstre, 1, -1 do
+        local monstre = ListMonstre[i]
+        if monstre.life > 0 then
+            love.graphics.print(math.floor(monstre.life), monstre.x+Camera_x,monstre.y-50+Camera_y)
+        end
     end
-    if BloodMage.life > 0 then
-    love.graphics.print(math.floor(BloodMage.life), BloodMage.x+Camera_x,BloodMage.y-50+Camera_y)
-    end
-    for i, sprite in ipairs(listSprite) do
+    for i, sprite in ipairs(ListMonstre) do
         if sprite.visible == true then
             local frame = sprite.img[math.floor(sprite.currentFrame)]
             love.graphics.draw(frame, sprite.x - (sprite.w/2)+Camera_x, sprite.y - (sprite.h/2)+Camera_y)

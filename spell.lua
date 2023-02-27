@@ -14,7 +14,7 @@ Spell.anim = {
 }
 
 --- --- --- --- --- ---
-
+phantomInvisibility = 0
 
 local function loadQuad()
     
@@ -220,17 +220,21 @@ local function updateSpellHero(dt)
         s.x = s.x + s.vx * dt
         s.y = s.y + s.vy * dt
         s.frame = s.frame + s.frameSpeed * dt
-
+        for j = #ListMonstre, 1, -1 do
+        local monstre = ListMonstre[j]
         
-        
-        if s.name == "fire" or  s.name == "midnight" then
-            local distDeath = Dist_P_P(Death.x-50, Death.y-50, s.x, s.y)
-            local distBloodMage = Dist_P_P(BloodMage.x-50, BloodMage.y-50, s.x, s.y)
-            if distDeath <= Death.size then
-                Death.life = Death.life - s.degat
+        local distMonstre = Dist_P_P(monstre.x-50, monstre.y-50, s.x, s.y)
+            if s.name == "fire" or  s.name == "midnight" then
+                if distMonstre <= monstre.size then
+                    monstre.life = monstre.life - s.degat
+                end
             end
-            if distBloodMage <= BloodMage.size then
-                BloodMage.life = BloodMage.life - s.degat
+            if s.name == "phantom" then
+                if distMonstre <= monstre.size then
+                    monstre.blind = true
+                    monstre.blindTimer = 3
+                    table.remove(listeSpells, i)
+                end
             end
         end
         if s.name == "life" then
@@ -242,39 +246,9 @@ local function updateSpellHero(dt)
                 end
             end
         end
-
-        if s.name == "phantom" then
-            local distDeath = Dist_P_P(Death.x-50, Death.y-50, s.x, s.y)
-            local distBloodMage = Dist_P_P(BloodMage.x-50, BloodMage.y-50, s.x, s.y)
-            if distDeath <= Death.size then
-                Hero.spellStart = nil
-                table.remove(listeSpells, i)
-                Hero.spellStart = love.timer.getTime() -- stocker le moment où le héros devient invisible
-                Hero.visible = false -- rendre le héros invisible
-            elseif distBloodMage <= BloodMage.size then
-                Hero.spellStart = nil
-                table.remove(listeSpells, i)
-                Hero.spellStart = love.timer.getTime()
-                Hero.visible = false
-            end
-        end
-        if Hero.spellStart then
-            --print("start", Hero.spellStart)
-            local invisibilityDuration = 5
-            if love.timer.getTime() < math.floor(Hero.spellStart) + invisibilityDuration then
-                Hero.visible = false 
-            else
-                Hero.visible = true 
-                Hero.spellStart = nil -- Réinitialiser la variable de début d'invisibilité
-            end
-        end
-        
-       
-
         if s.frame > 61 then
             table.remove(listeSpells, i)
         end
-        
     end
 end
 
@@ -331,6 +305,7 @@ local function changeDirSpell(x, y, button)
         end
     end
 end
+
 
 Spell.mousepressed = function(x, y, button)
     changeDirSpell(Mouse_x-50, Mouse_y-50, button)
