@@ -24,8 +24,13 @@ Hero.type = "hero"
 
 Hero.visible = true
 
-Hero.life = 100000000000
+Hero.life = 100000
 Hero.lifeMax = 100000
+
+Hero.mana = 50000
+Hero.manaMax = 50000
+Hero.manaRate = 5000
+
 Hero.hurt = function()
     Hero.life = Hero.life - 0.1
     if Hero.life <= 0 then
@@ -223,9 +228,19 @@ local function updateHeroAnim(dt)
     end
 end
 
+local function updateManaLife(dt)
+    if Hero.mana < Hero.manaMax then
+        Hero.mana = Hero.mana + Hero.manaRate * dt
+        if Hero.mana > Hero.manaMax then
+          Hero.mana = Hero.manaMax
+        end
+      end
+end
+
 Hero.update = function(dt)
     updateHeroAnim(dt)
     MySpell.update(dt)
+    updateManaLife(dt)
 end
 
 
@@ -303,23 +318,28 @@ local function drawHeroAnim()
 end
 
 Hero.draw = function()
-    love.graphics.print(math.floor(Hero.life), Hero.x+20+Camera_x,Hero.y+Camera_y)
+    love.graphics.print("Life"..math.floor(Hero.life), Hero.x+20+Camera_x,Hero.y-20+Camera_y)
+    if Hero.mana >= 0 then
+        love.graphics.print("Mana"..math.floor(Hero.mana), Hero.x+20+Camera_x,Hero.y+Camera_y)
+    else
+        love.graphics.print("Mana"..math.floor(0), Hero.x+20+Camera_x,Hero.y+Camera_y)
+    end
     drawHeroAnim()
     MySpell.draw()
 end
 
 
 local function keypressedSpell(key)
-    if key == "e" then
+    if key == "e" and Hero.mana >= 0 then
         CreateSpellFire(Hero.x -25, Hero.y-25, Mouse_x -50, Mouse_y -50, "fire")
     end
-    if key == "a" then
+    if key == "a" and Hero.mana >= 0 then
         CreateSpellMidnight(Hero.x -25, Hero.y -25, Mouse_x -50, Mouse_y -50, "midnight")
     end
-    if key == "c" then
+    if key == "c" and Hero.mana >= 0 then
         CreateSpellLife(Hero.x -18, Hero.y -18, Hero.x -25, Hero.y -25, "life")
     end
-    if key == "f" then
+    if key == "f" and Hero.mana >= 0 then
         CreateSpellProtect(Hero.x -18, Hero.y -18, Mouse_x-50, Mouse_y -50, "protect")
     end
 end
@@ -330,7 +350,7 @@ end
 
 
 local function mousepressedSpell(x, y, button)
-    if button == 2 then
+    if button == 2 and Hero.mana >= 0 then
         CreateSpellPhantom(Hero.x -25, Hero.y -25, Mouse_x-50, Mouse_y -50, "phantom")
     end
 end

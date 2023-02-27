@@ -142,7 +142,7 @@ local function statesAttack(monster)
             monster.state = STATES.CHANGEDIR
         elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > monster.range and monster.target.type == "hero" then
             monster.state = STATES.CHANGEDIR
-        elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) < 5 and monster.target.type == "hero" then
+        elseif math.dist(monster.x, monster.y, monster.target.x, monster.target.y) < monster.range-100 and monster.target.type == "hero" then
             monster.state = STATES.BITE
             monster.vx = 0
             monster.vy = 0

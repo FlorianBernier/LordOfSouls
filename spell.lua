@@ -48,12 +48,13 @@ function CreateSpellFire(x,y,dx,dy,name)
         name = name,
 
         angle = math.atan2(dy-y, dx- x),
-        speed = 100,
+        speed = 150,
 
         frame = 1,
         frameMax = 61,
         frameSpeed = 12,
-        degat = 100
+        degat = 30,
+        mana = 5
     }
 
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -72,12 +73,13 @@ function CreateSpellMidnight(x,y,dx,dy,name)
         name = name,
 
         angle = math.atan2(dy-y, dx- x),
-        speed = 150,
+        speed = 100,
 
         frame = 1,
         frameMax = 61,
         frameSpeed = 12,
-        degat = 50
+        degat = 100,
+        mana = 25
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -101,14 +103,12 @@ function CreateSpellLife(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
-        heal = 100,
-        
-
+        heal = 500,
+        mana = 500
         
     }
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
-
 
     table.insert(listeSpells, spell)
 end
@@ -128,13 +128,13 @@ function CreateSpellPhantom(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
-        
-        
-        
+        mana = 100
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
+    
+
     table.insert(listeSpells, spell)
 end
 
@@ -153,10 +153,12 @@ function CreateSpellProtect(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
+        mana = 5
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
+    
 
     table.insert(listeSpells, spell)
 end
@@ -176,13 +178,11 @@ function CreateSpellBluefire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        degat = 2000
+        degat = 50000,
+        mana = 0
     }
-    
-    
-    --Hero.life = Hero.life - 1000
-    
-    
+
+
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
 
@@ -204,7 +204,8 @@ function CreateSpellBrightfire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        degat = 300
+        degat = 50,
+        mana = 0
     }
     spell.vx = math.cos(spell.angle) * spell.speed
     spell.vy = math.sin(spell.angle) * spell.speed
@@ -215,6 +216,7 @@ end
 
 
 local function updateSpellHero(dt)
+
     for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]
         s.x = s.x + s.vx * dt
@@ -222,14 +224,16 @@ local function updateSpellHero(dt)
         s.frame = s.frame + s.frameSpeed * dt
         for j = #ListMonstre, 1, -1 do
         local monstre = ListMonstre[j]
-        
+
         local distMonstre = Dist_P_P(monstre.x-50, monstre.y-50, s.x, s.y)
             if s.name == "fire" or  s.name == "midnight" then
+                Hero.mana = Hero.mana - s.mana
                 if distMonstre <= monstre.size then
                     monstre.life = monstre.life - s.degat
                 end
             end
             if s.name == "phantom" then
+                Hero.mana = Hero.mana - s.mana
                 if distMonstre <= monstre.size then
                     monstre.blind = true
                     monstre.blindTimer = 3
@@ -238,6 +242,7 @@ local function updateSpellHero(dt)
             end
         end
         if s.name == "life" then
+            Hero.mana = Hero.mana - s.mana
             local distHero = Dist_P_P(Hero.x-25, Hero.y-25, s.x, s.y)
             if distHero <= Hero.size then
                 Hero.life = Hero.life + s.heal
