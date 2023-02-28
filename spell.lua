@@ -16,7 +16,7 @@ Spell.anim = {
 --- --- --- --- --- ---
 phantomInvisibility = 0
 
-local function loadQuad()
+ function loadQuad()
     
     for i = 1, 8, 1 do
         for j = 1, 8, 1 do
@@ -173,12 +173,12 @@ function CreateSpellBluefire(x,y,dx,dy,name)
 
         
         angle = math.atan2(dy-y, dx- x),
-        speed = 100,
+        speed = 150,
 
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        degat = 50000,
+        degat = 200,
         mana = 0
     }
 
@@ -213,9 +213,7 @@ function CreateSpellBrightfire(x,y,dx,dy,name)
     table.insert(listeSpells, spell)
 end
 
-
-
-local function updateSpellHero(dt)
+local function updateSpell(dt)
 
     for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]
@@ -251,33 +249,24 @@ local function updateSpellHero(dt)
                 end
             end
         end
-        if s.frame > 61 then
-            table.remove(listeSpells, i)
-        end
-    end
-end
 
-local function updateSpellMonster(dt)
-    for i = #listeSpells, 1, -1 do
-        local s = listeSpells[i]
-        s.x = s.x + s.vx * dt
-        s.y = s.y + s.vy * dt
-        s.frame = s.frame + s.frameSpeed * dt
-
-        
-        
         if s.name == "bluefire" or  s.name == "brightfire" then
             local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
             if distHero <= Hero.size then
                 Hero.life = Hero.life - s.degat
             end
         end
+    
+        if s.frame > 61 then
+            table.remove(listeSpells, i)
+        end
     end
 end
 
+
+
 Spell.update = function(dt)
-    updateSpellHero(dt)
-    updateSpellMonster(dt)
+    updateSpell(dt)
 end
 
 
@@ -295,7 +284,7 @@ end
 
 
 local lastSpell
-local function changeDirSpell(x, y, button)
+function changeDirSpell(x, y, button)
     if button == 1 then
         for i = #listeSpells, 1, -1 do
         local s = listeSpells[i]

@@ -1,6 +1,6 @@
 Hero = {}
 
-local MySpell = require("spell")
+
 
 
 Hero.anim = {
@@ -104,7 +104,6 @@ end
 
 Hero.load = function()
     loadQuad()
-    MySpell.load()
 end
 
 
@@ -244,7 +243,6 @@ end
 
 Hero.update = function(dt)
     updateHeroAnim(dt)
-    MySpell.update(dt)
     updateManaLife(dt)
 end
 
@@ -330,27 +328,12 @@ Hero.draw = function()
         love.graphics.print("Mana"..math.floor(0), Hero.x+20+Camera_x,Hero.y+Camera_y)
     end
     drawHeroAnim()
-    MySpell.draw()
 end
 
 
-local function keypressedSpell(key)
-    if key == "e" and Hero.mana >= 3000 then
-        CreateSpellFire(Hero.x -25, Hero.y-25, Mouse_x -50, Mouse_y -50, "fire")
-    end
-    if key == "a" and Hero.mana >= 10000 then
-        CreateSpellMidnight(Hero.x -25, Hero.y -25, Mouse_x -50, Mouse_y -50, "midnight")
-    end
-    if key == "c" and Hero.mana >= 10000 then
-        CreateSpellLife(Hero.x -18, Hero.y -18, Hero.x -25, Hero.y -25, "life")
-    end
-    if key == "f" and Hero.mana >= 10000 then
-        CreateSpellProtect(Hero.x -18, Hero.y -18, Mouse_x-50, Mouse_y -50, "protect")
-    end
-end
 
-Hero.keypressed = function(key)
-    keypressedSpell(key)
+
+Hero.keypressed = function()
 end
 
 
@@ -362,7 +345,6 @@ end
 
 Hero.mousepressed = function(x, y, button)
     mousepressedSpell(x, y, button)
-    MySpell.mousepressed(x, y, button)
 end
 
 

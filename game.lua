@@ -416,9 +416,6 @@ Game.Map.Grid2 = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
   }
 
-
-
-
 Game.Map.MAP_WIDTH = 50
 Game.Map.MAP_HEIGHT = 100
 Game.Map.TILE_WIDTH = 16
@@ -428,8 +425,7 @@ Game.TileSheet = nil
 Game.TileTextures = {}
 Game.TileTypes = {}
 
-
-function textureAtribution()
+local function textureAtribution()
     Game.TileSheet = love.graphics.newImage("images/map/TileSheetMap.png")
     local nbColumns = Game.TileSheet:getWidth() / Game.Map.TILE_WIDTH
     local nbLines = Game.TileSheet:getHeight() / Game.Map.TILE_HEIGHT
@@ -466,7 +462,7 @@ Game.update = function(dt)
 end
 
 
-function drawMapAndCollide()
+local function drawMapAndCollide()
     for l = 1, Game.Map.MAP_HEIGHT do
         for c = 1, Game.Map.MAP_WIDTH do
             local id = Game.Map.Grid[l][c]

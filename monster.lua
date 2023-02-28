@@ -1,5 +1,6 @@
 Monster = {}
 
+
 -- Returns the distance between two points.
 function math.dist(x1,y1, x2,y2) return ((x2-x1)^2+(y2-y1)^2)^0.5 end
 
@@ -122,10 +123,10 @@ local function statesLookHero(monster)
             monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
             if monster.timeSpellBlueFire <= 0 then
                 monster.timeSpellBlueFire = math.random(5,15)
-                CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
+                CreateSpellBluefire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
             end
                 if monster.timeSpellBrightFire <= 0 then
-                monster.timeSpellBrightFire = 100
+                monster.timeSpellBrightFire = 1
                 CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
             end
         end
