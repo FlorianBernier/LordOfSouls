@@ -9,7 +9,7 @@ local MyMonster = require("Monster")
 Entities.load = function()
     MyHero.load()
     MyMonster.load()
-    CreateDeath()
+    CreateDeath(400,1100)
     CreateDeath()
     CreateDeath()
 

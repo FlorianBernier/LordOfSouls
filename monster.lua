@@ -33,8 +33,6 @@ function CreateDeath()
     for i = 1, #imgDeath do
         table.insert(Death.img, imgDeath[i])
     end
-    Death.x = 0
-    Death.y = 0
     Death.vx = 0
     Death.vy = 0
     Death.w = Death.img[1]:getWidth()
@@ -63,8 +61,6 @@ function CreateBloodMage()
     for i = 1, #imgBloodMage do
         table.insert(BloodMage.img, imgBloodMage[i])
     end
-    BloodMage.x = 0
-    BloodMage.y = 0
     BloodMage.vx = 0
     BloodMage.vy = 0
     BloodMage.w = BloodMage.img[1]:getWidth()
@@ -180,14 +176,14 @@ end
 
 
 local function updateDeath(death)
-    statesCollideBorder(death,0,100,400, 200)
+    statesCollideBorder(death,0,100,800, 1200)
     statesLookHero(death)
     statesAttack(death)
     statesAttacCaC(death)
 end
 
 local function updateBloodMage(bloodMage)
-    statesCollideBorder(bloodMage,400,100, 800, 200)
+    statesCollideBorder(bloodMage,0,100, 800, 600)
     statesLookHero(bloodMage)
     statesAttack(bloodMage)
     statesAttacCaC(bloodMage)

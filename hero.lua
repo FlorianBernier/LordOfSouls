@@ -17,7 +17,7 @@ Hero.anim.img = love.graphics.newImage("images/personnage/fireMage.png")
 
 Hero.speed = 150
 Hero.x = 370
-Hero.y = 600--1500
+Hero.y = 1500
 Hero.size = 50
 
 Hero.type = "hero"
@@ -117,26 +117,27 @@ local function updateHeroAnim(dt)
         Hero.y = Hero.y - Hero.speed * dt
         isMove = true
         lastPos = "moveUp"
-
-    elseif love.keyboard.isDown("s") then
+    end
+    if love.keyboard.isDown("s") then
         Hero.anim.direction = "moveDown"
         Hero.y = Hero.y + Hero.speed * dt
         isMove = true
         lastPos = "moveDown"
-
-    elseif love.keyboard.isDown("q") then
+    end
+    if love.keyboard.isDown("q") then
         Hero.anim.direction = "moveLeft"
         Hero.x = Hero.x - Hero.speed * dt
         isMove = true
         lastPos = "moveLeft"
-    elseif love.keyboard.isDown("d") then
+    end
+    if love.keyboard.isDown("d") then
         Hero.anim.direction = "moveRight"
         Hero.x = Hero.x + Hero.speed * dt
         isMove = true
         lastPos = "moveRight"
-    
+    end
     --Attack1
-    elseif love.mouse.isDown(1) then
+    if love.mouse.isDown(1) then
         isMove = true
         if lastPos == "moveUp" then
             Hero.anim.attack1 = "attack1Up"
@@ -147,8 +148,9 @@ local function updateHeroAnim(dt)
         elseif lastPos == "moveRight" then
             Hero.anim.attack1 = "attack1Right"
         end
+    end
     --Attack2    
-    elseif love.mouse.isDown(2) then
+    if love.mouse.isDown(2) then
         isMove = true
         if lastPos == "moveUp" then
             Hero.anim.attack2 = "attack2Up"
@@ -159,8 +161,9 @@ local function updateHeroAnim(dt)
         elseif lastPos == "moveRight" then
             Hero.anim.attack2 = "attack2Right"
         end
+    end
     --Spell1    
-    elseif love.keyboard.isDown("a") then
+    if love.keyboard.isDown("a") then
         isMove = true
         if lastPos == "moveUp" then
             Hero.anim.spell1 = "spell1Up"
@@ -171,8 +174,9 @@ local function updateHeroAnim(dt)
         elseif lastPos == "moveRight" then
             Hero.anim.spell1 = "spell1Right"
         end
+    end
     --Spell2    
-    elseif love.keyboard.isDown("e") then
+    if love.keyboard.isDown("e") then
         isMove = true
         if lastPos == "moveUp" then
             Hero.anim.spell2 = "spell2Up"
@@ -183,8 +187,9 @@ local function updateHeroAnim(dt)
         elseif lastPos == "moveRight" then
             Hero.anim.spell2 = "spell2Right"
         end
+    end
     --Death    
-    elseif love.keyboard.isDown("r") then
+    if love.keyboard.isDown("r") then
         isMove = true
         if lastPos == "moveUp" then
             Hero.anim.death = "deathUp"
@@ -330,16 +335,16 @@ end
 
 
 local function keypressedSpell(key)
-    if key == "e" and Hero.mana >= 0 then
+    if key == "e" and Hero.mana >= 3000 then
         CreateSpellFire(Hero.x -25, Hero.y-25, Mouse_x -50, Mouse_y -50, "fire")
     end
-    if key == "a" and Hero.mana >= 0 then
+    if key == "a" and Hero.mana >= 10000 then
         CreateSpellMidnight(Hero.x -25, Hero.y -25, Mouse_x -50, Mouse_y -50, "midnight")
     end
-    if key == "c" and Hero.mana >= 0 then
+    if key == "c" and Hero.mana >= 10000 then
         CreateSpellLife(Hero.x -18, Hero.y -18, Hero.x -25, Hero.y -25, "life")
     end
-    if key == "f" and Hero.mana >= 0 then
+    if key == "f" and Hero.mana >= 10000 then
         CreateSpellProtect(Hero.x -18, Hero.y -18, Mouse_x-50, Mouse_y -50, "protect")
     end
 end
@@ -350,7 +355,7 @@ end
 
 
 local function mousepressedSpell(x, y, button)
-    if button == 2 and Hero.mana >= 0 then
+    if button == 2 and Hero.mana >= 20000 then
         CreateSpellPhantom(Hero.x -25, Hero.y -25, Mouse_x-50, Mouse_y -50, "phantom")
     end
 end
