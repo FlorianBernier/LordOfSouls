@@ -1,6 +1,11 @@
 Hero = {}
 
-
+function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
+    return x1 < x2+w2 and
+           x2 < x1+w1 and
+           y1 < y2+h2 and
+           y2 < y1+h1
+  end
 
 
 Hero.anim = {
@@ -18,7 +23,13 @@ Hero.anim.img = love.graphics.newImage("images/personnage/fireMage.png")
 Hero.speed = 150
 Hero.x = 370
 Hero.y = 1500
+Hero.w = 20
+Hero.h = 20
 Hero.size = 50
+
+Hero.prevX = Hero.x
+Hero.prevY = Hero.y
+
 
 Hero.type = "hero"
 
@@ -107,8 +118,12 @@ Hero.load = function()
 end
 
 
+
+
+
 local lastPos = ""
 local function updateHeroAnim(dt)
+    CollideWall(dt)
     local isMove = false
     --Move
     if love.keyboard.isDown("z") then
@@ -135,6 +150,8 @@ local function updateHeroAnim(dt)
         isMove = true
         lastPos = "moveRight"
     end
+
+
     --Attack1
     if love.mouse.isDown(1) then
         isMove = true
