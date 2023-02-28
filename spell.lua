@@ -53,7 +53,7 @@ function CreateSpellFire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 12,
-        degat = 30,
+        degat = 1000,
         mana = 5
     }
 
@@ -104,7 +104,7 @@ function CreateSpellLife(x,y,dx,dy,name)
         frameMax = 61,
         frameSpeed = 30,
         heal = 500,
-        mana = 500
+        mana = 150
         
     }
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -128,7 +128,7 @@ function CreateSpellPhantom(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 30,
-        mana = 100
+        mana = 25
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -178,7 +178,7 @@ function CreateSpellBluefire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        degat = 200,
+        degat = 100,
         mana = 0
     }
 
@@ -224,7 +224,14 @@ local function updateSpell(dt)
         local monstre = ListMonstre[j]
 
         local distMonstre = Dist_P_P(monstre.x-50, monstre.y-50, s.x, s.y)
-            if s.name == "fire" or  s.name == "midnight" then
+            if s.name == "fire" then
+                Hero.mana = Hero.mana - s.mana
+                if distMonstre <= monstre.size then
+                    monstre.life = monstre.life - s.degat
+                    table.remove(listeSpells, i)
+                end
+            end
+            if s.name == "midnight" then
                 Hero.mana = Hero.mana - s.mana
                 if distMonstre <= monstre.size then
                     monstre.life = monstre.life - s.degat

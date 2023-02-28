@@ -43,7 +43,7 @@ Hero.manaMax = 50000
 Hero.manaRate = 5000
 
 Hero.hurt = function()
-    Hero.life = Hero.life - 100
+    Hero.life = Hero.life - 10
     if Hero.life <= 0 then
         Hero.life = 0
         Hero.visible = false
