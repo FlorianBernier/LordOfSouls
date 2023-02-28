@@ -117,13 +117,11 @@ Hero.load = function()
     loadQuad()
 end
 
-
-
-
-
 local lastPos = ""
 local function updateHeroAnim(dt)
-    CollideWall(dt)
+    CollideWall()
+    OldX = Hero.x
+    OldY = Hero.y
     local isMove = false
     --Move
     if love.keyboard.isDown("z") then
