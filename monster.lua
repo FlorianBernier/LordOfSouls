@@ -37,8 +37,8 @@ function CreateDeath()
     Death.vy = 0
     Death.w = Death.img[1]:getWidth()
     Death.h = Death.img[1]:getHeight()    
-    Death.x = math.random(10, Screen_Width - 10)
-    Death.y = math.random(10, (Screen_Height/2) - 10)
+    Death.x = 400
+    Death.y = 900
     Death.speed = math.random(400) / 200
     Death.range = math.random(200,300)
     Death.target = nil
@@ -121,7 +121,7 @@ local function statesLookHero(monster)
             monster.timeSpellBlueFire = monster.timeSpellBlueFire - 1
             monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
             if monster.timeSpellBlueFire <= 0 then
-                monster.timeSpellBlueFire = 50
+                monster.timeSpellBlueFire = math.random(5,15)
                 CreateSpellFire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
             end
                 if monster.timeSpellBrightFire <= 0 then
@@ -156,7 +156,7 @@ end
 
 local function statesAttacCaC(monster)
     if monster.state == STATES.BITE then
-        if math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > 5 and monster.target.type == "hero" then
+        if math.dist(monster.x, monster.y, monster.target.x, monster.target.y) > monster.range-100 and monster.target.type == "hero" then
             monster.state = STATES.ATTACK
         else
             if monster.target.hurt ~= nil then
@@ -176,14 +176,14 @@ end
 
 
 local function updateDeath(death)
-    statesCollideBorder(death,0,100,800, 1200)
+    statesCollideBorder(death,0,300,800, 900)
     statesLookHero(death)
     statesAttack(death)
     statesAttacCaC(death)
 end
 
 local function updateBloodMage(bloodMage)
-    statesCollideBorder(bloodMage,0,100, 800, 600)
+    statesCollideBorder(bloodMage,0,100, 800, 300)
     statesLookHero(bloodMage)
     statesAttack(bloodMage)
     statesAttacCaC(bloodMage)
