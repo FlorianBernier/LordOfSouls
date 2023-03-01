@@ -47,6 +47,9 @@ function CreateDeath()
     Death.life = 30000
     Death.timeSpellBlueFire = 0
     Death.timeSpellBrightFire = 0
+    Death.timeSpellDisintegration = 0
+    Death.timeSpellNebula = 0
+    Death.timeSpellVortex = 0
     Death.blind = false
     Death.blindTimer = 0
     Death.state = STATES.NONE
@@ -75,6 +78,9 @@ function CreateBloodMage()
     BloodMage.life = 50000
     BloodMage.timeSpellBlueFire = 0
     BloodMage.timeSpellBrightFire = 0
+    BloodMage.timeSpellDisintegration = 0
+    BloodMage.timeSpellNebula = 0
+    BloodMage.timeSpellVortex = 0
     BloodMage.blind = false
     BloodMage.blindTimer = 0
     BloodMage.state = STATES.NONE
@@ -112,7 +118,7 @@ local function statesCollideBorder(monster, x, y ,w ,h)
     end
 end 
 
-local function statesLookHero(monster, cd1, cd2)
+local function statesLookHero(monster, cd1, cd2, cd3, cd4, cd5)
     --look for hero 
     local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
     if distance < monster.range then
@@ -120,13 +126,28 @@ local function statesLookHero(monster, cd1, cd2)
         monster.target = Hero
         monster.timeSpellBlueFire = monster.timeSpellBlueFire - 1
         monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
+        monster.timeSpellDisintegration = monster.timeSpellDisintegration - 1
+        monster.timeSpellNebula = monster.timeSpellNebula - 1
+        monster.timeSpellVortex = monster.timeSpellVortex - 1
         if monster.timeSpellBlueFire <= 0 then
             monster.timeSpellBlueFire = cd1
             CreateSpellBluefire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
         end
-            if monster.timeSpellBrightFire <= 0 then
+        if monster.timeSpellBrightFire <= 0 then
             monster.timeSpellBrightFire = cd2
             CreateSpellBrightfire(OldXHero-25, OldYHero-25, Hero.x -25, Hero.y-25, "brightfire")
+        end
+        if monster.timeSpellDisintegration <= 0 then
+            monster.timeSpellDisintegration = cd3
+            CreateSpellDisintegration(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "disintegration")
+        end
+        if monster.timeSpellNebula <= 0 then
+            monster.timeSpellNebula = cd4
+            CreateSpellNebula(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "nebula")
+        end
+        if monster.timeSpellVortex <= 0 then
+            monster.timeSpellVortex = cd5
+            CreateSpellVortex(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "vortex")
         end
 
     end
@@ -177,14 +198,14 @@ end
 
 local function updateDeath(death)
     statesCollideBorder(death,0,300,800, 900)
-    statesLookHero(death, 100, 250)
+    statesLookHero(death, 200, 300, 400, 500, 600)
     statesAttack(death)
     statesAttacCaC(death)
 end
 
 local function updateBloodMage(bloodMage)
     statesCollideBorder(bloodMage,0,100, 800, 300)
-    statesLookHero(bloodMage, 50, 500)
+    statesLookHero(bloodMage, 1500, 1000, 500, 250, 100)
     statesAttack(bloodMage)
     statesAttacCaC(bloodMage)
 end

@@ -11,6 +11,9 @@ Spell.anim = {
 
     ["bluefire"] = love.graphics.newImage("images/spell/bluefire.png"),
     ["brightfire"] = love.graphics.newImage("images/spell/brightfire.png"),
+    ["disintegration"] = love.graphics.newImage("images/spell/disintegration.png"),
+    ["nebula"] = love.graphics.newImage("images/spell/nebula.png"),
+    ["vortex"] = love.graphics.newImage("images/spell/vortex.png"),
 }
 
 --- --- --- --- --- ---
@@ -214,6 +217,78 @@ function CreateSpellBrightfire(x,y,dx,dy,name)
     table.insert(listeSpells, spell)
 end
 
+function CreateSpellDisintegration(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        
+        angle = math.atan2(dy-y, dx- x),
+        speed = 300,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 8,
+        degat = 30000,
+        mana = 0
+    }
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    table.insert(listeSpells, spell)
+end
+
+function CreateSpellNebula(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        
+        angle = math.atan2(dy-y, dx- x),
+        speed = 400,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 8,
+        degat = 20000,
+        mana = 0
+    }
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    table.insert(listeSpells, spell)
+end
+
+function CreateSpellVortex(x,y,dx,dy,name)
+    local spell = {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        name = name,
+
+        
+        angle = math.atan2(dy-y, dx- x),
+        speed = 500,
+
+        frame = 1,
+        frameMax = 61,
+        frameSpeed = 8,
+        degat = 10000,
+        mana = 0
+    }
+    spell.vx = math.cos(spell.angle) * spell.speed
+    spell.vy = math.sin(spell.angle) * spell.speed
+
+    table.insert(listeSpells, spell)
+end
+
 local function updateSpell(dt)
 
     for i = #listeSpells, 1, -1 do
@@ -268,6 +343,27 @@ local function updateSpell(dt)
             local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
             if distHero <= Hero.size then
                 Hero.life = Hero.life - s.degat
+            end
+        end
+        if s.name == "disintegration" then
+            local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
+            if distHero <= Hero.size then
+                Hero.life = Hero.life - s.degat
+                table.remove(listeSpells, i)
+            end
+        end
+        if s.name == "nebula" then
+            local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
+            if distHero <= Hero.size then
+                Hero.life = Hero.life - s.degat
+                table.remove(listeSpells, i)
+            end
+        end
+        if s.name == "vortex" then
+            local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
+            if distHero <= Hero.size then
+                Hero.life = Hero.life - s.degat
+                table.remove(listeSpells, i)
             end
         end
     
