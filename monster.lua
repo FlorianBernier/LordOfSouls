@@ -112,24 +112,23 @@ local function statesCollideBorder(monster, x, y ,w ,h)
     end
 end 
 
-local function statesLookHero(monster)
+local function statesLookHero(monster, cd1, cd2)
     --look for hero 
-    if Hero.type == "hero" and Hero.visible then
-        local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
-        if distance < monster.range then
-            monster.state = STATES.ATTACK
-            monster.target = Hero
-            monster.timeSpellBlueFire = monster.timeSpellBlueFire - 1
-            monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
-            if monster.timeSpellBlueFire <= 0 then
-                monster.timeSpellBlueFire = math.random(5,15)
-                CreateSpellBluefire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
-            end
-                if monster.timeSpellBrightFire <= 0 then
-                monster.timeSpellBrightFire = 1
-                CreateSpellBrightfire(Hero.x -25, Hero.x -25, Hero.x -25, Hero.y-25, "brightfire")
-            end
+    local distance = math.dist(monster.x, monster.y, Hero.x, Hero.y)
+    if distance < monster.range then
+        monster.state = STATES.ATTACK
+        monster.target = Hero
+        monster.timeSpellBlueFire = monster.timeSpellBlueFire - 1
+        monster.timeSpellBrightFire = monster.timeSpellBrightFire - 1
+        if monster.timeSpellBlueFire <= 0 then
+            monster.timeSpellBlueFire = cd1
+            CreateSpellBluefire(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "bluefire")
         end
+            if monster.timeSpellBrightFire <= 0 then
+            monster.timeSpellBrightFire = cd2
+            CreateSpellBrightfire(OldXHero-25, OldYHero-25, Hero.x -25, Hero.y-25, "brightfire")
+        end
+
     end
 end
 
@@ -178,14 +177,14 @@ end
 
 local function updateDeath(death)
     statesCollideBorder(death,0,300,800, 900)
-    statesLookHero(death)
+    statesLookHero(death, 100, 250)
     statesAttack(death)
     statesAttacCaC(death)
 end
 
 local function updateBloodMage(bloodMage)
     statesCollideBorder(bloodMage,0,100, 800, 300)
-    statesLookHero(bloodMage)
+    statesLookHero(bloodMage, 50, 500)
     statesAttack(bloodMage)
     statesAttacCaC(bloodMage)
 end

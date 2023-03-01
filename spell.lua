@@ -47,13 +47,14 @@ function CreateSpellFire(x,y,dx,dy,name)
         dy = dy,
         name = name,
 
+
         angle = math.atan2(dy-y, dx- x),
         speed = 150,
 
         frame = 1,
         frameMax = 61,
         frameSpeed = 12,
-        degat = 1000,
+        degat = 2500,
         mana = 5
     }
 
@@ -79,7 +80,7 @@ function CreateSpellMidnight(x,y,dx,dy,name)
         frameMax = 61,
         frameSpeed = 12,
         degat = 100,
-        mana = 25
+        mana = 17
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -256,14 +257,22 @@ local function updateSpell(dt)
                 end
             end
         end
-
-        if s.name == "bluefire" or  s.name == "brightfire" then
+        --- --- --- --- --- ---
+        if s.name == "bluefire" then
+            local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
+            if distHero <= Hero.size then
+                Hero.life = Hero.life - s.degat
+            end
+        end
+        if s.name == "brightfire" then
             local distHero = Dist_P_P(Hero.x-50, Hero.y-50, s.x, s.y)
             if distHero <= Hero.size then
                 Hero.life = Hero.life - s.degat
             end
         end
     
+
+
         if s.frame > 61 then
             table.remove(listeSpells, i)
         end

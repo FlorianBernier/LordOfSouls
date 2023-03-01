@@ -412,7 +412,7 @@ Game.Map.GridCollide = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 }
 
@@ -465,12 +465,18 @@ function CollideWall()
                 local wallW = 16
                 local wallH = 16
                 if CheckCollision(Hero.x+20, Hero.y+40, Hero.w, Hero.h, wallX, wallY, wallW, wallH) then
-                    Hero.x = OldX
-                    Hero.y = OldY
+                    Hero.x = OldXHero
+                    Hero.y = OldYHero
                 end
-            if Game.Map.GridCollide[i][j] == 2 then
-                print("collide sound")
             end
+            if Game.Map.GridCollide[i][j] == 2 then
+                local wallX = (j-1) * 16 -- la taille d'une case de la carte est de 20 pixels
+                local wallY = (i-1) * 16
+                local wallW = 16
+                local wallH = 16
+                if CheckCollision(Hero.x+20, Hero.y+40, Hero.w, Hero.h, wallX, wallY, wallW, wallH) then
+                print("collide sound")
+                end
             end
         end
     end

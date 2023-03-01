@@ -37,10 +37,9 @@ end
 
 
 Entities.draw = function()
-    MySpell.draw()
     MyMonster.draw()
     MyHero.draw()
-   
+    MySpell.draw()
 end
 
 local function keypressedSpell(key)

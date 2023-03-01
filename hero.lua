@@ -27,10 +27,6 @@ Hero.w = 20
 Hero.h = 20
 Hero.size = 50
 
-Hero.prevX = Hero.x
-Hero.prevY = Hero.y
-
-
 Hero.type = "hero"
 
 Hero.visible = true
@@ -43,7 +39,7 @@ Hero.manaMax = 50000
 Hero.manaRate = 5000
 
 Hero.hurt = function()
-    Hero.life = Hero.life - 10
+    Hero.life = Hero.life -- - 10
     if Hero.life <= 0 then
         Hero.life = 0
         Hero.visible = false
@@ -120,8 +116,8 @@ end
 local lastPos = ""
 local function updateHeroAnim(dt)
     CollideWall()
-    OldX = Hero.x
-    OldY = Hero.y
+    OldXHero = Hero.x
+    OldYHero = Hero.y
     local isMove = false
     --Move
     if love.keyboard.isDown("z") then
@@ -253,7 +249,13 @@ local function updateManaLife(dt)
         if Hero.mana > Hero.manaMax then
           Hero.mana = Hero.manaMax
         end
-      end
+    end
+    if Hero.life <= 0 then
+        Hero.x = 370
+        Hero.y = 1500
+        Camera_y = -1600
+        Camera_x = 0
+    end
 end
 
 Hero.update = function(dt)
@@ -263,8 +265,8 @@ end
 
 
 local function drawHeroAnim()
-    local x = Hero.x + Camera_x 
-    local y = Hero.y + Camera_y 
+    local x = Hero.x + Camera_x
+    local y = Hero.y + Camera_y
 
     local directions = {
         moveUp = Hero.anim.moveUp,
