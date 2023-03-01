@@ -149,7 +149,6 @@ local function statesLookHero(monster, cd1, cd2, cd3, cd4, cd5)
             monster.timeSpellVortex = cd5
             CreateSpellVortex(monster.x-50, monster.y-50, Hero.x -25, Hero.y-25, "vortex")
         end
-
     end
 end
 

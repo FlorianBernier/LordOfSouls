@@ -157,7 +157,7 @@ function CreateSpellProtect(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        mana = 5
+        mana = 150
     }
     
     spell.vx = math.cos(spell.angle) * spell.speed

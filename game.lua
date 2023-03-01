@@ -507,10 +507,9 @@ local lvl3Count = 0
 local lvl4Count = 0
 local lvl5Count = 0
 function CollideObjectif()
-    
     for i = 1, #Game.Map.GridCollide do
         for j = 1, #Game.Map.GridCollide[i] do
-            local wallX = (j-1) * 16 -- la taille d'une case de la carte est de 20 pixels
+            local wallX = (j-1) * 16
             local wallY = (i-1) * 16
             local wallW = 16
             local wallH = 16
