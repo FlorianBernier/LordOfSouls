@@ -12,17 +12,14 @@ Entities.load = function()
     MySpell.load()
     MyHero.load()
     MyMonster.load()
-    CreateDeath()
-    CreateDeath()
-    CreateDeath()
-    CreateDeath()
-    CreateDeath()
+    
 
-    CreateBloodMage()
-    CreateBloodMage()
-    CreateBloodMage()
-    CreateBloodMage()
-    CreateBloodMage()
+
+    --CreateDeath()
+    
+
+    --CreateBloodMage()
+
 
 end
 
@@ -31,7 +28,7 @@ Entities.update = function(dt)
     MySpell.update(dt)
     MyMonster.update(dt)
     MyHero.update(dt)
-    
+    CollideObjectif()
     
 end
 

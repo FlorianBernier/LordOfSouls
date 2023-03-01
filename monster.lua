@@ -25,7 +25,7 @@ local imgBloodMage = {
 --- --- --- --- --- --- ---
 ListMonstre = {}
 
-function CreateDeath()
+function CreateDeath(x,y)
     Death = {}
     Death.type = "death"
     Death.visible = true
@@ -38,8 +38,8 @@ function CreateDeath()
     Death.vy = 0
     Death.w = Death.img[1]:getWidth()
     Death.h = Death.img[1]:getHeight()    
-    Death.x = 400
-    Death.y = 900
+    Death.x = x
+    Death.y = y
     Death.speed = math.random(400) / 200
     Death.range = math.random(200,300)
     Death.target = nil
@@ -56,7 +56,7 @@ function CreateDeath()
     table.insert(ListMonstre, Death)
 end
 
-function CreateBloodMage()
+function CreateBloodMage(x,y)
     BloodMage = {}
     BloodMage.type = "bloodmage"
     BloodMage.visible = true
@@ -69,8 +69,8 @@ function CreateBloodMage()
     BloodMage.vy = 0
     BloodMage.w = BloodMage.img[1]:getWidth()
     BloodMage.h = BloodMage.img[1]:getHeight()    
-    BloodMage.x = math.random(10, Screen_Width - 10)
-    BloodMage.y = math.random(10, (Screen_Height/2) - 10)
+    BloodMage.x = x
+    BloodMage.y = y
     BloodMage.speed = math.random(100,200) / 200
     BloodMage.range = math.random(300,400)
     BloodMage.target = nil
@@ -197,15 +197,15 @@ end
 
 
 local function updateDeath(death)
-    statesCollideBorder(death,0,300,800, 900)
-    statesLookHero(death, 200, 300, 400, 500, 600)
+    statesCollideBorder(death,0,100,800, 1500)
+    statesLookHero(death, 200, 300, 400, 500, 800)
     statesAttack(death)
     statesAttacCaC(death)
 end
 
 local function updateBloodMage(bloodMage)
-    statesCollideBorder(bloodMage,0,100, 800, 300)
-    statesLookHero(bloodMage, 1500, 1000, 500, 250, 100)
+    statesCollideBorder(bloodMage,0,100, 800, 1500)
+    statesLookHero(bloodMage, 10, 200, 300, 400, 800)
     statesAttack(bloodMage)
     statesAttacCaC(bloodMage)
 end

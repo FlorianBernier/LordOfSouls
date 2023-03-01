@@ -182,7 +182,7 @@ function CreateSpellBluefire(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        degat = 100,
+        degat = 50,
         mana = 0
     }
 
@@ -232,7 +232,7 @@ function CreateSpellDisintegration(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        degat = 30000,
+        degat = 10000,
         mana = 0
     }
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -256,7 +256,7 @@ function CreateSpellNebula(x,y,dx,dy,name)
         frame = 1,
         frameMax = 61,
         frameSpeed = 8,
-        degat = 20000,
+        degat = 7000,
         mana = 0
     }
     spell.vx = math.cos(spell.angle) * spell.speed
@@ -275,12 +275,12 @@ function CreateSpellVortex(x,y,dx,dy,name)
 
         
         angle = math.atan2(dy-y, dx- x),
-        speed = 500,
+        speed = 50,
 
         frame = 1,
         frameMax = 61,
-        frameSpeed = 8,
-        degat = 10000,
+        frameSpeed = 4,
+        degat = 50000,
         mana = 0
     }
     spell.vx = math.cos(spell.angle) * spell.speed
