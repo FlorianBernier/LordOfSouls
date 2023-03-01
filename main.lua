@@ -56,10 +56,11 @@ local text = {
     "Immédiatement vous comprenez que ce n'était pas un rêve..."
   }
   local font = love.graphics.newFont(25)
+  local fontGame = love.graphics.newFont(15)
   local line_height = font:getHeight()
 
   -- position initiale
-  local y = 2200
+  local yTexte = 2200
 
 
 
@@ -85,10 +86,10 @@ love.update = function(dt)
     --- --- ---
     MyGame.update(dt)
 
-    y = y - 12.5 * dt
-    if y + line_height < 1900 then
+    yTexte = yTexte - 12.5 * dt
+    if yTexte + line_height < 1900 then
         table.remove(text, 1)
-        y = y + line_height
+        yTexte = yTexte + line_height
     end
 
 end
@@ -101,9 +102,9 @@ love.draw = function()
 
     love.graphics.setFont(font)
     for i, line in ipairs(text) do
-        love.graphics.print(line, 100+Camera_x, y + (i-1) * line_height+Camera_y)
+        love.graphics.print(line, 100+Camera_x, yTexte + (i-1) * line_height+Camera_y)
     end
-
+    love.graphics.setFont(fontGame) 
 end
 
 love.keypressed = function(key)

@@ -25,10 +25,11 @@ end
 
 
 Entities.update = function(dt)
+    CollideObjectif()
     MySpell.update(dt)
     MyMonster.update(dt)
     MyHero.update(dt)
-    CollideObjectif()
+    
     
 end
 
