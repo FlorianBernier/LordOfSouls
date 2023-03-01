@@ -55,18 +55,22 @@ local text = {
     "",
     "Immédiatement vous comprenez que ce n'était pas un rêve..."
   }
+local regle = {
+"Echap: Quitter l'intro - f2: Full Screen - f3: Quitter Jeu - f4: Collision - ZQSD: Déplacement personnage",
+
+"Spell A: Midnight - E: Fire - F: Protect - C: Cife - Clic Droit: Phantom - Clic Gauche: Déplacer les sort",
+"",
+"                   But du jeu: Activer les 5 statues dans le bon ordre afin de vaincre le boss !",
+"",
+"                             PS: SI VOUS MOURREZ IL FAUDRA VOUS HEAL POUR REJOUER",
+"",
+"                                                         BONNE CHANCE ET BON JEU !"
+}
+
   local font = love.graphics.newFont(25)
   local fontGame = love.graphics.newFont(15)
   local line_height = font:getHeight()
-
-  -- position initiale
   local yTexte = 2200
-
-
-
-
-
-
 
 --- --- --- --- --- --- --- --- --- --- --- --- ---
 local sndIntro = love.audio.newSource("sons/introLordOfSouls.wav", "static")
@@ -101,10 +105,16 @@ love.draw = function()
     love.graphics.draw(img, 0+Camera_x, 1600+Camera_y, 0, 0.6, 0.6)
 
     love.graphics.setFont(font)
+    
     for i, line in ipairs(text) do
         love.graphics.print(line, 100+Camera_x, yTexte + (i-1) * line_height+Camera_y)
     end
-    love.graphics.setFont(fontGame) 
+    love.graphics.setFont(fontGame)
+    for i, line in ipairs(regle) do
+        love.graphics.setColor(1,0,0)
+        love.graphics.print(line, 10+Camera_x, 1610 + (i-1) * line_height+Camera_y)
+        love.graphics.setColor(1,1,1)
+    end
 end
 
 love.keypressed = function(key)
