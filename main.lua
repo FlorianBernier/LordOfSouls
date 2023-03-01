@@ -28,7 +28,7 @@ love.keypressed = function(key)
     Setting.keypressed(key)
     --- --- ---
     MyGame.keypressed(key)
-    if key == "space" then
+    if key == "escape" then
         love.audio.stop(sndIntro)
         Camera_x = 0
         Camera_y = -1000
