@@ -16,7 +16,7 @@ Spell.anim = {
     ["vortex"] = love.graphics.newImage("images/spell/vortex.png"),
 }
 
---- --- --- --- --- ---
+--- --- --- --- --- --- test
 phantomInvisibility = 0
 
  function loadQuad()
